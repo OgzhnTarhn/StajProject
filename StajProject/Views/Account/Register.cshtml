@@ -1,17 +1,17 @@
-﻿@model StajProject.Models.LoginModel
+﻿@model StajProject.Models.RegisterModel
 
 @{
-    ViewBag.Title = "Giriş Yap";
+    ViewBag.Title = "Kayıt Ol";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
     <div class="card shadow" style="min-width:350px; max-width:400px; width:100%;">
         <div class="card-body p-4">
-            <h2 class="mb-4 text-center">Giriş Yap</h2>
-            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            <h2 class="mb-4 text-center">Kayıt Ol</h2>
+            @if (!string.IsNullOrEmpty(Model.Message))
             {
-                <div class="alert alert-danger text-center">@ViewBag.ErrorMessage</div>
+                <div class="alert alert-info text-center">@Model.Message</div>
             }
             @using (Html.BeginForm())
             {
@@ -25,11 +25,11 @@
                     @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Şifrenizi girin" })
                     @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+                <button type="submit" class="btn btn-primary w-100">Kayıt Ol</button>
             }
             <div class="mt-3 text-center">
-                <span>Hesabın yok mu?</span>
-                <a href="@Url.Action("Register", "Account")" class="btn btn-link">Kayıt Ol</a>
+                <span>Zaten hesabın var mı?</span>
+                <a href="@Url.Action("Login", "Account")" class="btn btn-link">Giriş Yap</a>
             </div>
         </div>
     </div>
