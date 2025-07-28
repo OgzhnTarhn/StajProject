@@ -1,0 +1,46 @@
+﻿@model StajProject.Models.SAPUserModel
+@{
+    ViewBag.Title = "Kullanıcı Paneli";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Varsayılan Layout, gerekirse değiştir
+}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow rounded-4 border-0">
+                <div class="card-body p-5">
+                    <div class="d-flex flex-column align-items-center mb-4">
+                        <div class="rounded-circle bg-primary bg-gradient text-white mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <h3 class="mb-1 fw-bold">Merhaba, @Model.Username!</h3>
+                        <span class="badge bg-info text-dark fs-6 mt-2 px-3 py-2">Rol: @(Model.Role == "U" ? "Kullanıcı" : Model.Role)</span>
+                    </div>
+                    <hr />
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item py-3 d-flex align-items-center">
+                            <i class="bi bi-person-fill text-primary me-2"></i>
+                            <span class="fw-semibold">Kullanıcı Adı:</span>
+                            <span class="ms-2">@Model.Username</span>
+                        </li>
+                        <li class="list-group-item py-3 d-flex align-items-center">
+                            <i class="bi bi-award-fill text-success me-2"></i>
+                            <span class="fw-semibold">Rol:</span>
+                            <span class="ms-2">@((Model.Role == "U") ? "Kullanıcı" : Model.Role)</span>
+                        </li>
+                    </ul>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger px-4">
+                            <i class="bi bi-box-arrow-right me-1"></i> Çıkış Yap
+                        </a>
+                    </div>
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                    {
+                        <div class="alert alert-danger text-center mt-3">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,7 +8,7 @@ public class SapController : Controller
 {
     public ActionResult GetUsers()
     {
-        var users = new List<SapUserModel>();
+        var users = new List<SAPUserModel>();
 
         // Bağlantı parametreleri:
         RfcConfigParameters parms = new RfcConfigParameters();
@@ -37,11 +37,11 @@ public class SapController : Controller
 
         foreach (IRfcStructure row in etUserInfo)
         {
-            users.Add(new SapUserModel
+            users.Add(new SAPUserModel
             {
-                USERNAME = row.GetString("USERNAME"),
-                PASSWORD = row.GetString("PASSWORD"),
-                ROLE = row.GetString("ROLE")
+                Username = row.GetString("USERNAME"),
+                Password = row.GetString("PASSWORD"),
+                Role = row.GetString("ROLE")
             });
         }
 

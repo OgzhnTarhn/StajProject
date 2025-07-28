@@ -1,0 +1,58 @@
+﻿@model List<StajProject.Models.SAPUserModel>
+
+@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Varsayılan layoutu kullan
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Kullanıcı Listesi</h2>
+        <a href="@Url.Action("AddUser", "Admin")" class="btn btn-success">+ Yeni Kullanıcı</a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert alert-success">@ViewBag.Message</div>
+    }
+
+    <table class="table table-bordered table-hover table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Kullanıcı Adı</th>
+                <th scope="col">Rol</th>
+                <th scope="col" style="width:180px;">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Username</td>
+                        <td>@(user.Role == "A" ? "Admin" : "User")</td>
+                        <td>
+                            <a href="@Url.Action("EditUser", "Admin", new { username = user.Username })" class="btn btn-warning btn-sm">Düzenle</a>
+                            <a href="@Url.Action("DeleteUser", "Admin", new { username = user.Username })"
+                               class="btn btn-danger btn-sm ms-1"
+                               onclick="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?');">
+                                Sil
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center text-muted">Kayıtlı kullanıcı yok.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
