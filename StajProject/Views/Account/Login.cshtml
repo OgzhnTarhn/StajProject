@@ -1,0 +1,29 @@
+﻿@model StajProject.Models.LoginModel
+
+@{
+    ViewBag.Title = "Giriş Yap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Giriş Yap</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Username, "Kullanıcı Adı")
+        @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, "Şifre")
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Giriş Yap</button>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+    {
+        <div class="alert alert-danger">@error.ErrorMessage</div>
+    }
+}

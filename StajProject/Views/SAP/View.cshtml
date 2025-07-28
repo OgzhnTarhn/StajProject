@@ -1,0 +1,35 @@
+﻿@model List<StajProject.Models.SapUserModel>
+
+@{
+    ViewBag.Title = "SAP Kullanıcı Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Layout kullanmak istemiyorsan: Layout = null;
+}
+
+<h2>SAP Kullanıcı Listesi</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning">Kullanıcı bulunamadı.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Kullanıcı Adı</th>
+                <th>Şifre</th>
+                <th>Rol</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.USERNAME</td>
+                    <td>@user.PASSWORD</td>
+                    <td>@user.ROLE</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
