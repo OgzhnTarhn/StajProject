@@ -75,4 +75,66 @@ public class AdminController : Controller
     }
 
     // --- (İLERİDE) Kullanıcı düzenleme ve silme action'larını buraya ekleyeceksin! ---
+    [HttpGet]
+public ActionResult EditUser(string username)
+    {
+        if (Session["Role"] == null || Session["Role"].ToString() != "A")
+            return RedirectToAction("Login", "Account");
+
+        var model = new RegisterModel();
+
+        try
+        {
+            RfcDestination dest;
+            IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_GET_USER", out dest);
+            func.SetValue("IV_USERNAME", username);
+            func.SetValue("IV_PASSWORD", ""); // Şifre kontrolü yoksa boş
+            func.Invoke(dest);
+
+            IRfcTable etUserInfo = func.GetTable("ET_USER_INFO");
+            if (etUserInfo.Count > 0)
+            {
+                var userRow = etUserInfo[0];
+                model.Username = userRow.GetString("USERNAME");
+                model.Role = userRow.GetString("ROLE");
+                // Şifreyi göstermiyoruz (güvenlik için) ancak istersek alanı boş bırakıp değiştirebiliriz
+            }
+        }
+        catch (RfcAbapException ex)
+        {
+            ViewBag.ErrorMessage = "SAP Hatası: " + ex.Message;
+        }
+
+        return View(model);
+    }
+
+    // POST: Kullanıcı düzenle
+    [HttpPost]
+    public ActionResult EditUser(RegisterModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                RfcDestination dest;
+                IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_UPDATE_USER", out dest);
+
+                func.SetValue("IV_USERNAME", model.Username);
+                func.SetValue("IV_ROLE", model.Role);
+
+                // Şifre değiştirmek istiyorsa doldurulur, yoksa backend'de şifre eski kalır.
+                func.SetValue("IV_PASSWORD", string.IsNullOrWhiteSpace(model.Password) ? null : model.Password);
+
+                func.Invoke(dest);
+
+                ViewBag.Message = func.GetString("EV_RESULT");
+                return RedirectToAction("Dashboard");
+            }
+            catch (RfcAbapException ex)
+            {
+                ViewBag.ErrorMessage = "SAP Hatası: " + ex.Message;
+            }
+        }
+        return View(model);
+    }
 }
