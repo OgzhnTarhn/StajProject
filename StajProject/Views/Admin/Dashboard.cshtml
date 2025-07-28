@@ -2,13 +2,17 @@
 
 @{
     ViewBag.Title = "Admin Dashboard";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Varsayılan layoutu kullan
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-5">
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Kullanıcı Listesi</h2>
-        <a href="@Url.Action("AddUser", "Admin")" class="btn btn-success">+ Yeni Kullanıcı</a>
+        <div>
+            <a href="@Url.Action("AddUser", "Admin")" class="btn btn-success me-2">+ Yeni Kullanıcı</a>
+            <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger">Çıkış Yap</a>
+        </div>
     </div>
 
     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
@@ -18,6 +22,10 @@
     @if (!string.IsNullOrEmpty(ViewBag.Message))
     {
         <div class="alert alert-success">@ViewBag.Message</div>
+    }
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">@TempData["Message"]</div>
     }
 
     <table class="table table-bordered table-hover table-striped">

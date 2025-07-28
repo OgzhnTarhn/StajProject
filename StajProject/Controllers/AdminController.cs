@@ -132,5 +132,31 @@ public class AdminController : Controller
         }
         return View(model);
     }
+    [HttpGet]
+    public ActionResult DeleteUser(string username)
+    {
+        if (Session["Role"] == null || Session["Role"].ToString() != "A")
+            return RedirectToAction("Login", "Account");
+
+        string message = "";
+
+        try
+        {
+            RfcDestination dest;
+            IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_DELETE_USER", out dest);
+
+            func.SetValue("IV_USERNAME", username);
+            func.Invoke(dest);
+
+            message = func.GetString("EV_RESULT");
+            TempData["Message"] = message;  // Dashboard'da göstereceğiz
+        }
+        catch (RfcAbapException ex)
+        {
+            TempData["Message"] = "SAP Hatası: " + ex.Message;
+        }
+
+        return RedirectToAction("Dashboard");
+    }
 
 }
