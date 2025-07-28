@@ -73,43 +73,24 @@ public class AdminController : Controller
         }
         return View(model);
     }
-
     [HttpGet]
     public ActionResult EditUser(string username)
     {
         if (Session["Role"] == null || Session["Role"].ToString() != "A")
             return RedirectToAction("Login", "Account");
 
-        var model = new EditUserRoleModel { TargetUsername = username };
+        var model = new EditUserProfileModel { Username = username };
 
-        try
-        {
-            RfcDestination dest;
-            IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_GET_USER", out dest);
-            func.SetValue("IV_USERNAME", username);
-            func.SetValue("IV_PASSWORD", "");
-            func.Invoke(dest);
-
-            IRfcTable etUserInfo = func.GetTable("ET_USER_INFO");
-            if (etUserInfo.Count > 0)
-            {
-                var userRow = etUserInfo[0];
-                model.TargetUsername = userRow.GetString("USERNAME");
-                model.Role = userRow.GetString("ROLE");
-            }
-        }
-        catch (RfcAbapException ex)
-        {
-            ViewBag.ErrorMessage = "SAP Hatası: " + ex.Message;
-        }
-
+        // Kullanıcının mevcut rolünü çekmek için SAP'den veri çekebilirsin (opsiyonel)
         return View(model);
     }
 
-    // Kullanıcı rolü düzenle (POST)
     [HttpPost]
-    public ActionResult EditUser(EditUserRoleModel model)
+    public ActionResult EditUser(EditUserProfileModel model)
     {
+        if (Session["Role"] == null || Session["Role"].ToString() != "A")
+            return RedirectToAction("Login", "Account");
+
         if (ModelState.IsValid)
         {
             try
@@ -117,21 +98,28 @@ public class AdminController : Controller
                 RfcDestination dest;
                 IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_UPDATE_USER", out dest);
 
-                func.SetValue("IV_TARGET_USERNAME", model.TargetUsername);
-                func.SetValue("IV_ROLE", model.Role);
+                func.SetValue("IV_USERNAME", model.Username);
+                func.SetValue("IV_OLD_PASSWORD", ""); // Admin şifre girmez
+                func.SetValue("IV_NEW_USERNAME", ""); // Admin değiştirmez
+                func.SetValue("IV_NEW_PASSWORD", ""); // Admin değiştirmez
+                func.SetValue("IV_ROLE", model.Role); // Sadece rol
 
                 func.Invoke(dest);
 
-                ViewBag.Message = func.GetString("EV_RESULT");
+                model.Message = func.GetString("EV_RESULT");
+                TempData["Message"] = model.Message;
                 return RedirectToAction("Dashboard");
             }
             catch (RfcAbapException ex)
             {
-                ViewBag.ErrorMessage = "SAP Hatası: " + ex.Message;
+                model.Message = "SAP Hatası: " + ex.Message;
             }
         }
         return View(model);
     }
+
+
+
     [HttpGet]
     public ActionResult DeleteUser(string username)
     {

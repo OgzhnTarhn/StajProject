@@ -136,7 +136,6 @@
     </Compile>
     <Compile Include="Helpers\SapConnectorBase.cs" />
     <Compile Include="Models\EditUserProfileModel.cs" />
-    <Compile Include="Models\EditUserRoleModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\SAPUserModel.cs" />

@@ -1,49 +1,26 @@
-﻿@model StajProject.Models.EditUserRoleModel
+﻿@model StajProject.Models.EditUserProfileModel
 
 @{
     ViewBag.Title = "Kullanıcı Rolü Düzenle";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-5 col-md-7">
-            <div class="card shadow rounded-4 border-0">
-                <div class="card-body p-5">
-                    <h3 class="text-center mb-4 fw-bold">Kullanıcı Rolü Düzenle</h3>
-
-                    @if (!string.IsNullOrEmpty(ViewBag.Message))
-                    {
-                        <div class="alert alert-success text-center mb-3">@ViewBag.Message</div>
-                    }
-                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-                    {
-                        <div class="alert alert-danger text-center mb-3">@ViewBag.ErrorMessage</div>
-                    }
-
-                    @using (Html.BeginForm())
-                    {
-                        <div class="mb-3">
-                            @Html.LabelFor(m => m.TargetUsername, "Kullanıcı Adı", new { @class = "form-label" })
-                            @Html.TextBoxFor(m => m.TargetUsername, new { @class = "form-control", @readonly = "readonly" })
-                        </div>
-                        <div class="mb-3">
-                            @Html.LabelFor(m => m.Role, "Rol", new { @class = "form-label" })
-                            @Html.DropDownListFor(m => m.Role,
-                                new SelectList(new[] {
-                                    new { Value = "U", Text = "Kullanıcı" },
-                                    new { Value = "A", Text = "Admin" }
-                                }, "Value", "Text", Model.Role),
-                                "Rol seçin", new { @class = "form-select" })
-                            @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
-                        </div>
-                        <button type="submit" class="btn btn-warning w-100">Rolü Güncelle</button>
-                    }
-                    <div class="mt-4 text-center">
-                        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-link">← Admin Paneline Dön</a>
-                    </div>
-                </div>
-            </div>
+<div class="container mt-5">
+    <h2>Kullanıcı Rolü Düzenle</h2>
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-info">@Model.Message</div>
+    }
+    @using (Html.BeginForm())
+    {
+        <div class="mb-3">
+            <label>Kullanıcı Adı:</label>
+            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @readonly = "readonly" })
         </div>
-    </div>
+        <div class="mb-3">
+            <label>Rol:</label>
+            @Html.DropDownListFor(m => m.Role, new SelectList(new[] { new { Value = "A", Text = "Admin" }, new { Value = "U", Text = "User" } }, "Value", "Text"), new { @class = "form-select" })
+        </div>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary ms-2">Vazgeç</a>
+    }
 </div>

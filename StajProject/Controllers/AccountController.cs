@@ -130,13 +130,11 @@ public class AccountController : Controller
     [HttpGet]
     public ActionResult EditProfile()
     {
+        // Session kontrolü
         if (Session["Role"] == null || Session["Role"].ToString() != "U")
             return RedirectToAction("Login");
 
-        var model = new EditUserProfileModel
-        {
-            Username = Session["Username"]?.ToString()
-        };
+        var model = new EditUserProfileModel { Username = Session["Username"].ToString() };
         return View(model);
     }
 
@@ -153,17 +151,18 @@ public class AccountController : Controller
                 RfcDestination dest;
                 IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_UPDATE_USER", out dest);
 
-                // Kullanıcı adı değişikliği için
                 func.SetValue("IV_USERNAME", model.Username);
+                func.SetValue("IV_OLD_PASSWORD", model.OldPassword);
                 func.SetValue("IV_NEW_USERNAME", model.NewUsername ?? "");
-                func.SetValue("IV_OLD_PASSWORD", model.OldPassword ?? "");
                 func.SetValue("IV_NEW_PASSWORD", model.NewPassword ?? "");
+                func.SetValue("IV_ROLE", ""); // User rol değiştiremez
+
                 func.Invoke(dest);
 
                 model.Message = func.GetString("EV_RESULT");
 
-                // Kullanıcı adı değişmişse session'ı güncelle
-                if (!string.IsNullOrEmpty(model.NewUsername) && model.Message.Contains("başarı"))
+                // Kullanıcı adı değiştiyse session güncelle
+                if (!string.IsNullOrEmpty(model.NewUsername) && model.Message.Contains("güncellendi"))
                     Session["Username"] = model.NewUsername;
             }
             catch (RfcAbapException ex)
