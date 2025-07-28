@@ -1,6 +1,6 @@
-﻿using SAP.Middleware.Connector;
-using StajProject.Models;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using SAP.Middleware.Connector;
+using StajProject.Helpers;
 using StajProject.Models;
 
 public class AccountController : Controller
@@ -16,22 +16,10 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            // SAP Bağlantı parametreleri
-            RfcConfigParameters parms = new RfcConfigParameters();
-            parms.Add(RfcConfigParameters.Name, "SAP_DEST");
-            parms.Add(RfcConfigParameters.AppServerHost, "172.31.2.10");
-            parms.Add(RfcConfigParameters.SystemNumber, "00");
-            parms.Add(RfcConfigParameters.User, "xdeveloper");
-            parms.Add(RfcConfigParameters.Password, "Sf5687!pl@");
-            parms.Add(RfcConfigParameters.Client, "100");
-            parms.Add(RfcConfigParameters.Language, "EN");
-            parms.Add(RfcConfigParameters.PoolSize, "5");
-
             try
             {
-                RfcDestination dest = RfcDestinationManager.GetDestination(parms);
-                RfcRepository repo = dest.Repository;
-                IRfcFunction func = repo.CreateFunction("ZUSR_GET_USER");
+                RfcDestination dest;
+                IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_GET_USER", out dest);
 
                 func.SetValue("IV_USERNAME", model.Username);
                 func.SetValue("IV_PASSWORD", model.Password);
@@ -41,12 +29,9 @@ public class AccountController : Controller
 
                 if (etUserInfo.Count > 0)
                 {
-
-                    // Kullanıcı bulundu
                     var userRow = etUserInfo[0];
                     model.Role = userRow.GetString("ROLE");
 
-                    // Kullanıcı rolüne göre yönlendir
                     if (model.Role == "A")
                         return RedirectToAction("AdminIndex", "Home");
                     else if (model.Role == "U")
@@ -66,4 +51,71 @@ public class AccountController : Controller
         }
         return View(model);
     }
+
+    [HttpGet]
+    public ActionResult Register()
+    {
+        return View(new RegisterModel());
+    }
+
+    [HttpPost]
+    public ActionResult Register(RegisterModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                RfcDestination dest;
+                IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_INSERT_USER", out dest);
+
+                func.SetValue("IV_USERNAME", model.Username);
+                func.SetValue("IV_PASSWORD", model.Password);
+                func.SetValue("IV_ROLE", "U"); // Kayıt olan kullanıcı hep User olur
+
+                func.Invoke(dest);
+
+                model.Message = func.GetString("EV_RESULT");
+            }
+            catch (RfcAbapException ex)
+            {
+                model.Message = "SAP Hatası: " + ex.Message;
+            }
+        }
+        return View(model);
+    }
+
+    // Admin panelinde kullanılacak örnek altyapı:
+    [HttpGet]
+    public ActionResult AddUser()
+    {
+        return View(new RegisterModel());
+    }
+
+    [HttpPost]
+    public ActionResult AddUser(RegisterModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                RfcDestination dest;
+                IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_INSERT_USER", out dest);
+
+                func.SetValue("IV_USERNAME", model.Username);
+                func.SetValue("IV_PASSWORD", model.Password);
+                func.SetValue("IV_ROLE", model.Role); // Admin panelinde seçilen rol gönderilir
+
+                func.Invoke(dest);
+
+                model.Message = func.GetString("EV_RESULT");
+            }
+            catch (RfcAbapException ex)
+            {
+                model.Message = "SAP Hatası: " + ex.Message;
+            }
+        }
+        return View(model);
+    }
+
+    // Diğer fonksiyonlar için (update/delete) de bu altyapıyı kullanabilirsin!
 }
