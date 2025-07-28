@@ -41,6 +41,7 @@ public class AccountController : Controller
 
                 if (etUserInfo.Count > 0)
                 {
+
                     // Kullanıcı bulundu
                     var userRow = etUserInfo[0];
                     model.Role = userRow.GetString("ROLE");
