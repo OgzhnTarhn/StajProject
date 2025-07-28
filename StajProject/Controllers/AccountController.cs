@@ -127,6 +127,52 @@ public class AccountController : Controller
 
         return View(userInfo);
     }
+    [HttpGet]
+    public ActionResult EditProfile()
+    {
+        if (Session["Role"] == null || Session["Role"].ToString() != "U")
+            return RedirectToAction("Login");
+
+        var model = new EditUserProfileModel
+        {
+            Username = Session["Username"]?.ToString()
+        };
+        return View(model);
+    }
+
+    [HttpPost]
+    public ActionResult EditProfile(EditUserProfileModel model)
+    {
+        if (Session["Role"] == null || Session["Role"].ToString() != "U")
+            return RedirectToAction("Login");
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                RfcDestination dest;
+                IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_UPDATE_USER", out dest);
+
+                // Kullanıcı adı değişikliği için
+                func.SetValue("IV_USERNAME", model.Username);
+                func.SetValue("IV_NEW_USERNAME", model.NewUsername ?? "");
+                func.SetValue("IV_OLD_PASSWORD", model.OldPassword ?? "");
+                func.SetValue("IV_NEW_PASSWORD", model.NewPassword ?? "");
+                func.Invoke(dest);
+
+                model.Message = func.GetString("EV_RESULT");
+
+                // Kullanıcı adı değişmişse session'ı güncelle
+                if (!string.IsNullOrEmpty(model.NewUsername) && model.Message.Contains("başarı"))
+                    Session["Username"] = model.NewUsername;
+            }
+            catch (RfcAbapException ex)
+            {
+                model.Message = "SAP Hatası: " + ex.Message;
+            }
+        }
+        return View(model);
+    }
 
     public ActionResult Logout()
     {
@@ -134,3 +180,4 @@ public class AccountController : Controller
         return RedirectToAction("Login");
     }
 }
+

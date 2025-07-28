@@ -1,0 +1,45 @@
+﻿@model StajProject.Models.EditUserProfileModel
+@{
+    ViewBag.Title = "Profilimi Düzenle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow rounded-4 border-0">
+                <div class="card-body p-5">
+                    <h3 class="mb-4 text-center">Profilimi Düzenle</h3>
+                    @if (!string.IsNullOrEmpty(Model.Message))
+                    {
+                        <div class="alert alert-info text-center">@Model.Message</div>
+                    }
+                    @using (Html.BeginForm())
+                    {
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.Username, "Mevcut Kullanıcı Adı", new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.NewUsername, "Yeni Kullanıcı Adı (boş bırakma değiştirmez)", new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.NewUsername, new { @class = "form-control", placeholder = "Yeni kullanıcı adınız (değiştirmek istemiyorsan boş bırak)" })
+                        </div>
+                        <hr />
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.OldPassword, "Mevcut Şifre", new { @class = "form-label" })
+                            @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control", placeholder = "Mevcut şifreniz" })
+                        </div>
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.NewPassword, "Yeni Şifre (boş bırakma değiştirmez)", new { @class = "form-label" })
+                            @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control", placeholder = "Yeni şifreniz (değiştirmek istemiyorsan boş bırak)" })
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+                    }
+                    <div class="mt-3 text-center">
+                        <a href="@Url.Action("UserDashboard", "Account")" class="btn btn-outline-secondary">Geri Dön</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

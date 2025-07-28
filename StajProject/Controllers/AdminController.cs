@@ -74,30 +74,28 @@ public class AdminController : Controller
         return View(model);
     }
 
-    // --- (İLERİDE) Kullanıcı düzenleme ve silme action'larını buraya ekleyeceksin! ---
     [HttpGet]
-public ActionResult EditUser(string username)
+    public ActionResult EditUser(string username)
     {
         if (Session["Role"] == null || Session["Role"].ToString() != "A")
             return RedirectToAction("Login", "Account");
 
-        var model = new RegisterModel();
+        var model = new EditUserRoleModel { TargetUsername = username };
 
         try
         {
             RfcDestination dest;
             IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_GET_USER", out dest);
             func.SetValue("IV_USERNAME", username);
-            func.SetValue("IV_PASSWORD", ""); // Şifre kontrolü yoksa boş
+            func.SetValue("IV_PASSWORD", "");
             func.Invoke(dest);
 
             IRfcTable etUserInfo = func.GetTable("ET_USER_INFO");
             if (etUserInfo.Count > 0)
             {
                 var userRow = etUserInfo[0];
-                model.Username = userRow.GetString("USERNAME");
+                model.TargetUsername = userRow.GetString("USERNAME");
                 model.Role = userRow.GetString("ROLE");
-                // Şifreyi göstermiyoruz (güvenlik için) ancak istersek alanı boş bırakıp değiştirebiliriz
             }
         }
         catch (RfcAbapException ex)
@@ -108,9 +106,9 @@ public ActionResult EditUser(string username)
         return View(model);
     }
 
-    // POST: Kullanıcı düzenle
+    // Kullanıcı rolü düzenle (POST)
     [HttpPost]
-    public ActionResult EditUser(RegisterModel model)
+    public ActionResult EditUser(EditUserRoleModel model)
     {
         if (ModelState.IsValid)
         {
@@ -119,11 +117,8 @@ public ActionResult EditUser(string username)
                 RfcDestination dest;
                 IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_UPDATE_USER", out dest);
 
-                func.SetValue("IV_USERNAME", model.Username);
+                func.SetValue("IV_TARGET_USERNAME", model.TargetUsername);
                 func.SetValue("IV_ROLE", model.Role);
-
-                // Şifre değiştirmek istiyorsa doldurulur, yoksa backend'de şifre eski kalır.
-                func.SetValue("IV_PASSWORD", string.IsNullOrWhiteSpace(model.Password) ? null : model.Password);
 
                 func.Invoke(dest);
 
@@ -137,4 +132,5 @@ public ActionResult EditUser(string username)
         }
         return View(model);
     }
+
 }
