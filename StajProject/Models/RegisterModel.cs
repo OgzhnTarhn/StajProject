@@ -1,10 +1,18 @@
-﻿namespace StajProject.Models
+﻿using System.ComponentModel.DataAnnotations;
+using StajProject.Attributes;
+namespace StajProject.Models
 {
     public class RegisterModel
     {
+        [Required(ErrorMessage = "Kullanıcı adı zorunlu.")]
         public string Username { get; set; }
+
+        [StrongPassword] // Yeterli! Mesajları attribute yönetiyor.
         public string Password { get; set; }
-        public string Role { get; set; }      // Sadece admin panelinde kullanılacak!
-        public string Message { get; set; }   // Sonuç mesajı (SAP'den gelen)
+
+        public string Role { get; set; }
+        public string Message { get; set; }
     }
+
+
 }
