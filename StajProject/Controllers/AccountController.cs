@@ -40,7 +40,8 @@ public class AccountController : Controller
                     if (model.Role == "A")
                         return RedirectToAction("Dashboard", "Admin");
                     else if (model.Role == "U")
-                        return RedirectToAction("UserDashboard", "Account");
+                        return RedirectToAction("Index", "Block");
+
                     else
                         ModelState.AddModelError("", "Geçersiz rol.");
                 }

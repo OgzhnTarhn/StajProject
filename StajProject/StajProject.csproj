@@ -251,6 +251,8 @@
     <Content Include="Views\Account\UserDashboard.cshtml" />
     <Content Include="Views\Admin\EditUser.cshtml" />
     <Content Include="Views\Account\EditProfile.cshtml" />
+    <Content Include="Views\Block\Index.cshtml" />
+    <Content Include="Views\Block\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

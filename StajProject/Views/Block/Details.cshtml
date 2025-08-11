@@ -1,0 +1,20 @@
+﻿@model StajProject.Models.BlockVm
+@using System.Linq
+
+@{
+    ViewBag.Title = "Gezi Detayları";
+}
+
+<h2>@(Model.Headers != null && Model.Headers.Count > 0 ? Model.Headers[0].Title : "")</h2>
+
+
+<ul class="list-group">
+    @foreach (var detail in Model.Details)
+    {
+        <li class="list-group-item">
+            @detail.SeqNo - @detail.LineText
+        </li>
+    }
+</ul>
+
+<a href="@Url.Action("Index", "Block")" class="btn btn-secondary mt-3">← Geri</a>
