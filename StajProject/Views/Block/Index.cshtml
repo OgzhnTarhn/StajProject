@@ -1,11 +1,7 @@
 ﻿@model List<StajProject.Models.BlockHeaderModel>
 
-@{
-    ViewBag.Title = "Geziler";
-}
-
 @functions{
-    // SAP DATS → dd.MM.yyyy
+    // SAP DATS -> dd.MM.yyyy
     string SapDate(string d)
     {
         if (string.IsNullOrWhiteSpace(d) || d.Length != 8) return "";
@@ -14,37 +10,29 @@
 }
 
 <h2>Geziler</h2>
-
-@if (Model == null || Model.Count == 0)
-{
-    <div class="alert alert-info">Listelenecek gezi bulunamadı.</div>
-}
-else
-{
-    <table class="table table-bordered table-hover">
-        <thead>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Oluşturma Tarihi</th>
+            <th>Güncelleme Tarihi</th>
+            <th style="width:120px;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>Başlık</th>
-                <th>Oluşturma Tarihi</th>
-                <th>Güncelleme Tarihi</th>
-                <th style="width:120px;"></th>
+                <td>@item.Title</td>
+                <td>@SapDate(item.Erdat)</td>   <!-- burada yazdırıyoruz -->
+                <td>@SapDate(item.Aedat)</td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                       href="@Url.Action("Details", "Block", new { id = item.BlockId })">
+                        Detay
+                    </a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Title</td>
-                    <td>@SapDate(item.Erdat)</td>
-                    <td>@SapDate(item.Aedat)</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm"
-                           href="@Url.Action("Details", "Block", new { id = item.BlockId })">
-                            Detay
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+        }
+    </tbody>
+</table>
