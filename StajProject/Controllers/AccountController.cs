@@ -37,22 +37,19 @@ public class AccountController : Controller
                     Session["Role"] = model.Role;
                     Session["Password"] = model.Password; // Bunu EKELE! (user dashboard için lazım)
 
-                    if (model.Role == "A")
-                        return RedirectToAction("Index", "Block"); // Admin direkt Geziler sayfasına
-                    else if (model.Role == "U")
-                        return RedirectToAction("Index", "Block");
-
+                    if (model.Role == "A" || model.Role == "U")
+                        return RedirectToAction("Index", "Home"); // Ana sayfaya yönlendir, oradan role göre yönlendirilecek
                     else
-                        ModelState.AddModelError("", "Geçersiz rol.");
+                        ModelState.AddModelError("", "Invalid role.");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
+                    ModelState.AddModelError("", "Invalid username or password.");
                 }
             }
             catch (RfcAbapException ex)
             {
-                ModelState.AddModelError("", "SAP Hatası: " + ex.Message);
+                ModelState.AddModelError("", "SAP Error: " + ex.Message);
             }
         }
         return View(model);
@@ -81,14 +78,14 @@ public class AccountController : Controller
                 func.Invoke(dest);
 
                 string result = func.GetString("EV_RESULT");
-                if (result.Contains("başarıyla"))
+                if (result.Contains("successfully") || result.Contains("başarıyla"))
                     return RedirectToAction("Login");
                 else
                     ModelState.AddModelError("", result);
             }
             catch (RfcAbapException ex)
             {
-                ModelState.AddModelError("", "SAP Hatası: " + ex.Message);
+                ModelState.AddModelError("", "SAP Error: " + ex.Message);
             }
         }
         return View(model);
@@ -123,7 +120,7 @@ public class AccountController : Controller
         }
         catch (RfcAbapException ex)
         {
-            ViewBag.ErrorMessage = "SAP Hatası: " + ex.Message;
+            ViewBag.ErrorMessage = "SAP Error: " + ex.Message;
         }
 
         return View(userInfo);
@@ -163,12 +160,12 @@ public class AccountController : Controller
                 model.Message = func.GetString("EV_RESULT");
 
                 // Kullanıcı adı değiştiyse session güncelle
-                if (!string.IsNullOrEmpty(model.NewUsername) && model.Message.Contains("güncellendi"))
+                if (!string.IsNullOrEmpty(model.NewUsername) && (model.Message.Contains("güncellendi") || model.Message.Contains("updated")))
                     Session["Username"] = model.NewUsername;
             }
             catch (RfcAbapException ex)
             {
-                model.Message = "SAP Hatası: " + ex.Message;
+                model.Message = "SAP Error: " + ex.Message;
             }
         }
         return View(model);

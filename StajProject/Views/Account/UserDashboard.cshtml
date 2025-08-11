@@ -1,6 +1,6 @@
 ﻿@model StajProject.Models.SAPUserModel
 @{
-    ViewBag.Title = "Kullanıcı Paneli";
+    ViewBag.Title = "User Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,14 +11,14 @@
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <h1 class="display-4 fw-bold mb-3">
-                        <i class="fas fa-user-circle me-3"></i>Kullanıcı Paneli
+                        <i class="fas fa-user-circle me-3"></i>User Dashboard
                     </h1>
-                    <p class="lead mb-0">Hoş geldiniz, @Model.Username! Hesap bilgilerinizi buradan yönetebilirsiniz.</p>
+                    <p class="lead mb-0">Welcome, @Model.Username! You can manage your account information here.</p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
                     <div class="d-flex flex-column align-items-lg-end">
                         <span class="badge bg-light text-primary mb-2 px-3 py-2">
-                            <i class="fas fa-user-tag me-2"></i>@((@Model.Role == "U") ? "Kullanıcı" : @Model.Role)
+                            <i class="fas fa-user-tag me-2"></i>@((@Model.Role == "U") ? "User" : @Model.Role)
                         </span>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                 <div class="card border-0 shadow h-100">
                     <div class="card-header bg-white border-0 py-4">
                         <h4 class="mb-0">
-                            <i class="fas fa-user me-2 text-primary"></i>Kullanıcı Bilgileri
+                            <i class="fas fa-user me-2 text-primary"></i>User Information
                         </h4>
                     </div>
                     <div class="card-body">
@@ -45,7 +45,7 @@
                             <div>
                                 <h5 class="mb-1 fw-bold">@Model.Username</h5>
                                 <span class="badge bg-info bg-opacity-10 text-info px-3 py-2">
-                                    <i class="fas fa-award me-1"></i>@((@Model.Role == "U") ? "Kullanıcı" : @Model.Role)
+                                    <i class="fas fa-award me-1"></i>@((@Model.Role == "U") ? "User" : @Model.Role)
                                 </span>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                                 <div class="d-flex align-items-center p-3 bg-light rounded">
                                     <i class="fas fa-user text-primary me-3"></i>
                                     <div>
-                                        <small class="text-muted d-block">Kullanıcı Adı</small>
+                                        <small class="text-muted d-block">Username</small>
                                         <strong>@Model.Username</strong>
                                     </div>
                                 </div>
@@ -64,8 +64,8 @@
                                 <div class="d-flex align-items-center p-3 bg-light rounded">
                                     <i class="fas fa-shield-alt text-success me-3"></i>
                                     <div>
-                                        <small class="text-muted d-block">Rol</small>
-                                        <strong>@((@Model.Role == "U") ? "Kullanıcı" : @Model.Role)</strong>
+                                        <small class="text-muted d-block">Role</small>
+                                        <strong>@((@Model.Role == "U") ? "User" : @Model.Role)</strong>
                                     </div>
                                 </div>
                             </div>
@@ -79,19 +79,19 @@
                 <div class="card border-0 shadow h-100">
                     <div class="card-header bg-white border-0 py-4">
                         <h4 class="mb-0">
-                            <i class="fas fa-bolt me-2 text-warning"></i>Hızlı İşlemler
+                            <i class="fas fa-bolt me-2 text-warning"></i>Quick Actions
                         </h4>
                     </div>
                     <div class="card-body">
                         <div class="d-grid gap-3">
                             <a href="@Url.Action("Index", "Block")" class="btn btn-primary btn-lg">
-                                <i class="fas fa-map-marked-alt me-2"></i>Gezileri Görüntüle
+                                <i class="fas fa-map-marked-alt me-2"></i>View Trips
                             </a>
                             <a href="@Url.Action("EditProfile", "Account")" class="btn btn-outline-primary btn-lg">
-                                <i class="fas fa-user-edit me-2"></i>Profil Düzenle
+                                <i class="fas fa-user-edit me-2"></i>Edit Profile
                             </a>
                             <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary btn-lg">
-                                <i class="fas fa-home me-2"></i>Ana Sayfa
+                                <i class="fas fa-home me-2"></i>Home
                             </a>
                         </div>
                         
@@ -99,7 +99,7 @@
                         
                         <div class="text-center">
                             <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger btn-lg px-5">
-                                <i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
                             </a>
                         </div>
                     </div>

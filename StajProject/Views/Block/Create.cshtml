@@ -7,16 +7,16 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <!-- Admin Kontrolü -->
+            <!-- Admin Check -->
             @if (Session["Role"] == null || Session["Role"].ToString() != "A")
             {
                 <div class="alert alert-danger text-center" role="alert">
                     <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
-                    <h4 class="alert-heading">Erisim Reddedildi!</h4>
-                    <p class="mb-0">Bu sayfaya sadece admin kullanicilar erisebilir.</p>
+                    <h4 class="alert-heading">Access Denied!</h4>
+                    <p class="mb-0">Only admin users can access this page.</p>
                     <hr>
                     <a href="@Url.Action("Index", "Block")" class="btn btn-outline-danger">
-                        <i class="fas fa-arrow-left me-2"></i>Geri Don
+                        <i class="fas fa-arrow-left me-2"></i>Go Back
                     </a>
                 </div>
             }
@@ -25,16 +25,16 @@
                 <!-- Hero Section -->
                 <div class="text-center mb-5">
                     <h1 class="display-4 fw-bold text-primary">
-                        <i class="fas fa-plus-circle me-3"></i>Yeni Gezi Olustur
+                        <i class="fas fa-plus-circle me-3"></i>Create New Trip
                     </h1>
-                    <p class="lead text-muted">Yeni bir gezi plani olusturmak icin asagidaki formu doldurun.</p>
+                    <p class="lead text-muted">Fill out the form below to create a new trip plan.</p>
                 </div>
 
                 <!-- Form Card -->
                 <div class="card border-0 shadow-lg">
                     <div class="card-header bg-primary text-white py-3">
                         <h5 class="mb-0">
-                            <i class="fas fa-map-marked-alt me-2"></i>Gezi Bilgileri
+                            <i class="fas fa-map-marked-alt me-2"></i>Trip Information
                         </h5>
                     </div>
                     <div class="card-body p-4">
@@ -42,79 +42,85 @@
                         {
                             @Html.AntiForgeryToken()
 
-                            <!-- Başlık -->
+                            <!-- Title -->
                             <div class="mb-4">
                                 <label for="Title" class="form-label fw-bold">
-                                    <i class="fas fa-heading me-2 text-primary"></i>Gezi Basligi
+                                    <i class="fas fa-heading me-2 text-primary"></i>Trip Title
                                 </label>
                                 @Html.TextBoxFor(m => m.Title, new
                                 {
-    @class = "form-control form-control-lg",
-    placeholder = "Orn: Istanbul Gezisi, Kapadokya Turu...",
-    required = "required"
-})
+                                    @class = "form-control form-control-lg",
+                                    placeholder = "Example: Istanbul Trip, Cappadocia Tour...",
+                                    required = "required"
+                                })
                                 @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
                                 <div class="form-text">
-                                    <i class="fas fa-info-circle me-1"></i>Gezi planinizi en iyi sekilde tanimlayan bir baslik girin.
+                                    <i class="fas fa-info-circle me-1"></i>Enter a title that best describes your trip plan.
                                 </div>
                             </div>
 
-                            <!-- Detay Satirları -->
+                            <!-- Detail Lines -->
                             <div class="mb-4">
                                 <label for="DetailLines" class="form-label fw-bold">
-                                    <i class="fas fa-list me-2 text-primary"></i>Gezi Detaylari
+                                    <i class="fas fa-list me-2 text-primary"></i>Trip Details
                                 </label>
                                 @Html.TextAreaFor(m => m.DetailLines, new
                                 {
                                     @class = "form-control",
                                     rows = "8",
-                                    placeholder = "Her satira bir detay yazin... Ornek: 1. Sabah 09:00 - Topkapi Sarayi"
+                                    placeholder = "Write one detail per line... Example: 1. Morning 09:00 - Topkapi Palace"
                                 })
                                 @Html.ValidationMessageFor(m => m.DetailLines, "", new { @class = "text-danger" })
                                 <div class="form-text">
-                                    <i class="fas fa-info-circle me-1"></i>Her satira bir gezi detayi yazin. Bos satirlar otomatik olarak atlanacaktir.
+                                    <i class="fas fa-info-circle me-1"></i>Write one trip detail per line. Blank lines will be skipped automatically.
                                 </div>
                             </div>
 
-                            <!-- Butonlar -->
+                            <!-- Buttons -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <a href="@Url.Action("Index", "Block")" class="btn btn-outline-secondary btn-lg">
-                                    <i class="fas fa-arrow-left me-2"></i>Iptal
+                                    <i class="fas fa-arrow-left me-2"></i>Cancel
                                 </a>
                                 <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-save me-2"></i>Gezi Olustur
+                                    <i class="fas fa-save me-2"></i>Create Trip
                                 </button>
                             </div>
                         }
                     </div>
                 </div>
-
-                <!-- Yardım Kartı -->
-                <div class="card border-0 shadow-sm mt-4">
-                    <div class="card-body">
-                        <h6 class="card-title text-primary">
-                            <i class="fas fa-lightbulb me-2"></i>Ipuclari
-                        </h6>
-                        <ul class="list-unstyled mb-0">
-                            <li class="mb-2">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <strong>Baslik:</strong> Kisa ama aciklayici olmali
-                            </li>
-                            <li class="mb-2">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <strong>Detaylar:</strong> Her satira bir aktivite yazin
-                            </li>
-                            <li class="mb-2">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <strong>Zaman:</strong> Mumkunse saat bilgisi ekleyin
-                            </li>
-                            <li class="mb-0">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <strong>Oncelik:</strong> Onemli yerleri once yazin
-                            </li>
-                        </ul>
-                    </div>
+            }
+            <!-- Help Card -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body">
+                    <h6 class="card-title text-primary">
+                        <i class="fas fa-lightbulb me-2"></i>Tips
+                    </h6>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Title:</strong> Should be short but descriptive
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Details:</strong> Write one activity per line
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Time:</strong> Add time information if possible
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <strong>Priority:</strong> Write important items first
+                        </li>
+                    </ul>
                 </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+               
             }
         </div>
     </div>

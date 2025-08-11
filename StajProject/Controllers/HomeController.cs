@@ -10,7 +10,14 @@ namespace StajProject.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            // Kullanıcı giriş yapmamışsa Login'e yönlendir
+            if (Session["Username"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
+            // Giriş yapan herkes direkt Trips sayfasına yönlendirilsin
+            return RedirectToAction("Index", "Block");
         }
 
         public ActionResult About()
@@ -26,16 +33,5 @@ namespace StajProject.Controllers
 
             return View();
         }
-       
-            public ActionResult AdminIndex()
-            {
-                return View();
-            }
-            public ActionResult UserIndex()
-            {
-                return View();
-            }
-        
-
     }
 }

@@ -16,6 +16,12 @@ namespace StajProject.Controllers
         // Block listesi
         public ActionResult Index()
         {
+            // Session kontrolü
+            if (Session["Username"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             try
             {
                 var vm = _sapController.GetBlocks(null); // Tüm header'lar
@@ -23,7 +29,7 @@ namespace StajProject.Controllers
             }
             catch (System.Exception ex)
             {
-                TempData["ErrorMessage"] = "Block listesi alınırken hata oluştu: " + ex.Message;
+                TempData["ErrorMessage"] = "Error getting block list: " + ex.Message;
                 return View(new List<BlockHeaderModel>()); // Boş liste ile devam et
             }
         }
@@ -31,6 +37,12 @@ namespace StajProject.Controllers
         // Block detayları
         public ActionResult Details(string id)
         {
+            // Session kontrolü
+            if (Session["Username"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (string.IsNullOrEmpty(id))
                 return RedirectToAction("Index");
 
@@ -41,7 +53,7 @@ namespace StajProject.Controllers
             }
             catch (System.Exception ex)
             {
-                TempData["ErrorMessage"] = "Block detayları alınırken hata oluştu: " + ex.Message;
+                TempData["ErrorMessage"] = "Error getting block details: " + ex.Message;
                 return RedirectToAction("Index");
             }
         }
@@ -75,12 +87,12 @@ namespace StajProject.Controllers
                 var newId = _sapController.InsertBlock(model.Title, lines);
 
                 // Başarılı → detaya git
-                TempData["SuccessMessage"] = "Block başarıyla oluşturuldu!";
+                TempData["SuccessMessage"] = "Block created successfully!";
                 return RedirectToAction("Details", new { id = newId });
             }
             catch (System.Exception ex)
             {
-                ModelState.AddModelError("", "Block oluşturulurken hata oluştu: " + ex.Message);
+                ModelState.AddModelError("", "Error creating block: " + ex.Message);
                 return View(model);
             }
         }
@@ -109,7 +121,7 @@ namespace StajProject.Controllers
 
             var lines = ParseLines(model.DetailLines);
             var ok = _sapController.UpdateBlock(model.BlockId, model.Title, model.ReplaceDetails, lines);
-            if (!ok) ModelState.AddModelError("", "Güncelleme başarısız");
+            if (!ok) ModelState.AddModelError("", "Update failed");
 
             return RedirectToAction("Details", new { id = model.BlockId });
         }

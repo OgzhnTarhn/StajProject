@@ -16,10 +16,10 @@ namespace StajProject.Controllers
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            // Admin değilse login sayfasına yönlendir
+            // Admin değilse Trips sayfasına yönlendir
             filterContext.Result = new RedirectToRouteResult(
                 new System.Web.Routing.RouteValueDictionary(
-                    new { controller = "Account", action = "Login" }
+                    new { controller = "Block", action = "Index" }
                 )
             );
         }
