@@ -24,21 +24,21 @@
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <h1 class="display-4 fw-bold mb-3">
-                        <i class="fas fa-map-marked-alt me-3"></i>Geziler
+                        <i class="fas fa-map-marked-alt me-3"></i>Trips
                     </h1>
-                    <p class="lead mb-0">Tüm gezi planlarınızı buradan görüntüleyebilir ve yönetebilirsiniz.</p>
+                    <p class="lead mb-0">View all your trip plans here.</p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
                     @if (Session["Role"] != null && Session["Role"].ToString() == "A")
                     {
                         <a href="@Url.Action("Create", "Block")" class="btn btn-light btn-lg">
-                            <i class="fas fa-plus me-2"></i>Yeni Gezi Ekle
+                            <i class="fas fa-plus me-2"></i>Add New Trip
                         </a>
                     }
                     else
                     {
                         <span class="text-white-50">
-                            <i class="fas fa-lock me-2"></i>Sadece Admin Ekleme Yapabilir
+                            <i class="fas fa-lock me-2"></i>Only Admin Can Add
                         </span>
                     }
                 </div>
@@ -54,18 +54,18 @@
                 <div class="mb-4">
                     <i class="fas fa-map text-muted" style="font-size: 64px;"></i>
                 </div>
-                <h3 class="text-muted mb-3">Henüz Gezi Bulunmuyor</h3>
-                <p class="text-muted mb-4">İlk gezi planınızı oluşturmaya başlayın.</p>
+                <h3 class="text-muted mb-3">No Trips Found</h3>
+                <p class="text-muted mb-4">Start creating your first trip plan.</p>
                 @if (Session["Role"] != null && Session["Role"].ToString() == "A")
                 {
                     <a href="@Url.Action("Create", "Block")" class="btn btn-primary btn-lg">
-                        <i class="fas fa-plus me-2"></i>İlk Geziyi Oluştur
+                        <i class="fas fa-plus me-2"></i>Create First Trip
                     </a>
                 }
                 else
                 {
                     <span class="text-muted">
-                        <i class="fas fa-lock me-2"></i>Sadece Admin Ekleme Yapabilir
+                        <i class="fas fa-lock me-2"></i>Only Admin Can Add
                     </span>
                 }
             </div>
@@ -76,9 +76,9 @@
                 <div class="card-header bg-white border-0 py-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">
-                            <i class="fas fa-list me-2 text-primary"></i>Gezi Listesi
+                            <i class="fas fa-list me-2 text-primary"></i>Trip List
                         </h3>
-                        <span class="badge bg-primary fs-6 px-3 py-2">@Model.Count toplam</span>
+                        <span class="badge bg-primary fs-6 px-3 py-2">@Model.Count total</span>
                     </div>
                 </div>
                 <div class="card-body p-0">
@@ -87,16 +87,16 @@
                             <thead class="table-light">
                                 <tr>
                                     <th class="border-0 px-4 py-3">
-                                        <i class="fas fa-heading me-2 text-primary"></i>Başlık
+                                        <i class="fas fa-heading me-2 text-primary"></i>Title
                                     </th>
                                     <th class="border-0 px-4 py-3">
-                                        <i class="fas fa-calendar-plus me-2 text-success"></i>Oluşturma Tarihi
+                                        <i class="fas fa-calendar-plus me-2 text-success"></i>Creation Date
                                     </th>
                                     <th class="border-0 px-4 py-3">
-                                        <i class="fas fa-edit me-2 text-info"></i>Güncelleme Tarihi
+                                        <i class="fas fa-edit me-2 text-info"></i>Update Date
                                     </th>
-                                    <th class="border-0 px-4 py-3 text-end" style="width: 150px;">
-                                        <i class="fas fa-cogs me-2 text-secondary"></i>İşlemler
+                                    <th class="border-0 px-4 py-3 text-end" style="width: 100px;">
+                                        <i class="fas fa-eye me-2 text-secondary"></i>View
                                     </th>
                                 </tr>
                             </thead>
@@ -126,7 +126,7 @@
                                                 else
                                                 {
                                                     <span class="text-muted">
-                                                        <i class="fas fa-calendar-times me-1"></i>Belirtilmemiş
+                                                        <i class="fas fa-calendar-times me-1"></i>Not Specified
                                                     </span>
                                                 }
                                             </div>
@@ -142,27 +142,17 @@
                                                 else
                                                 {
                                                     <span class="text-muted">
-                                                        <i class="fas fa-minus me-1"></i>Güncellenmemiş
+                                                        <i class="fas fa-minus me-1"></i>Not Updated
                                                     </span>
                                                 }
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 text-end">
-                                            <div class="btn-group" role="group">
-                                                <a class="btn btn-outline-primary btn-sm" 
-                                                   href="@Url.Action("Details", "Block", new { id = item.BlockId })"
-                                                   title="Detayları Görüntüle">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a class="btn btn-outline-secondary btn-sm" 
-                                                   href="@Url.Action("Edit", "Block", new { id = item.BlockId })"
-                                                   title="Gezi Düzenle">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button class="btn btn-outline-danger btn-sm" title="Sil (Henüz hazır değil)" disabled>
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
+                                            <a class="btn btn-outline-primary btn-sm" 
+                                               href="@Url.Action("Details", "Block", new { id = item.BlockId })"
+                                               title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 }
