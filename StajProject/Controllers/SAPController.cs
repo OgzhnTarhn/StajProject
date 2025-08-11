@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Web.Mvc;
+using System.Web;
 
 namespace StajProject.Controllers
 {
@@ -28,12 +29,12 @@ namespace StajProject.Controllers
         }
 
         // Kullanıcı listesi (ZUSR_GET_USER)
-        public ActionResult GetUsers()
+        public List<SAPUserModel> GetUsers()
         {
-            var users = new List<SAPUserModel>();
-
             try
             {
+                var users = new List<SAPUserModel>();
+
                 var dest = GetDestination();
                 var repo = dest.Repository;
 
@@ -56,22 +57,22 @@ namespace StajProject.Controllers
                     });
                 }
 
-                return View(users);
+                return users;
             }
             catch (Exception ex)
             {
-                return new HttpStatusCodeResult(500, "SAP Hatası: " + ex.Message);
+                throw new Exception("SAP Hatası: " + ex.Message);
             }
         }
 
         // Block verileri (ZBLOCK_GET)
         public BlockVm GetBlocks(string blockId = null)
         {
-            var headers = new List<BlockHeaderModel>();
-            var details = new List<BlockDetailModel>();
-
             try
             {
+                var headers = new List<BlockHeaderModel>();
+                var details = new List<BlockDetailModel>();
+
                 var dest = GetDestination();
                 var repo = dest.Repository;
 
@@ -123,5 +124,56 @@ namespace StajProject.Controllers
                 throw new Exception("SAP Hatası: " + ex.Message);
             }
         }
+
+        // Block oluşturma metodu (ZBLOCK_INSERT)
+        public string InsertBlock(string title, IList<string> detailLines = null)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(title))
+                {
+                    throw new ArgumentException("Başlık boş olamaz");
+                }
+
+                var dest = GetDestination();
+                var repo = dest.Repository;
+                IRfcFunction func = repo.CreateFunction("ZBLOCK_INSERT");
+
+                // importing
+                func.SetValue("IV_TITLE", title.Trim());
+
+                // tables (sadece LINE_TEXT dolduracağız; SEQ_NO istemezsen boş bırak)
+                IRfcTable itDtl = func.GetTable("IT_DTL");
+                if (detailLines != null && detailLines.Count > 0)
+                {
+                    int seq = 1;
+                    foreach (var line in detailLines)
+                    {
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+                        itDtl.Append();
+                        itDtl.SetValue("LINE_TEXT", line.Trim());
+                        itDtl.SetValue("SEQ_NO", seq++);
+                    }
+                }
+
+                func.Invoke(dest);
+
+                // exporting
+                string newId = func.GetString("EV_BLOCK_ID");
+                
+                if (string.IsNullOrWhiteSpace(newId))
+                {
+                    throw new Exception("Block ID döndürülemedi");
+                }
+
+                return newId;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Block oluşturulurken hata: " + ex.Message);
+            }
+        }
+
+
     }
 }
