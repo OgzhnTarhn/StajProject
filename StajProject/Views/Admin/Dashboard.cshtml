@@ -8,12 +8,12 @@
 <div class="container mt-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-users me-2"></i>Kullanıcı Listesi (Sadece Görüntüleme)</h2>
+        <h2><i class="fas fa-users me-2"></i>User List (View Only)</h2>
         <div>
             <a href="@Url.Action("Index", "Block")" class="btn btn-primary me-2">
-                <i class="fas fa-map-marked-alt me-1"></i>Gezilere Dön
+                <i class="fas fa-map-marked-alt me-1"></i>Back to Trips
             </a>
-            <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger">Çıkış Yap</a>
+            <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger">Logout</a>
         </div>
     </div>
 
@@ -33,9 +33,8 @@
     <table class="table table-bordered table-hover table-striped">
         <thead class="table-dark">
             <tr>
-                <th scope="col">Kullanıcı Adı</th>
-                <th scope="col">Rol</th>
-                <th scope="col" style="width:180px;">İşlemler</th>
+                <th scope="col">Username</th>
+                <th scope="col">Role</th>
             </tr>
         </thead>
         <tbody>
@@ -46,16 +45,13 @@
                     <tr>
                         <td>@user.Username</td>
                         <td>@(user.Role == "A" ? "Admin" : "User")</td>
-                        <td>
-                            <span class="badge bg-info">Sadece Görüntüleme</span>
-                        </td>
                     </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="3" class="text-center text-muted">Kayıtlı kullanıcı yok.</td>
+                    <td colspan="2" class="text-center text-muted">No registered users found.</td>
                 </tr>
             }
         </tbody>

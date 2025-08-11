@@ -1,4 +1,4 @@
-@model StajProject.Models.EditBlockVm
+﻿@model StajProject.Models.EditBlockVm
 
 @{
     ViewBag.Title = "Gezi Düzenle";
@@ -48,8 +48,9 @@
                                 <label for="Title" class="form-label fw-bold">
                                     <i class="fas fa-heading me-2 text-warning"></i>Gezi Başlığı
                                 </label>
-                                @Html.TextBoxFor(m => m.Title, new { 
-                                    @class = "form-control form-control-lg", 
+                                @Html.TextBoxFor(m => m.Title, new
+                                {
+                                    @class = "form-control form-control-lg",
                                     placeholder = "Orn: İstanbul Gezisi, Kapadokya Turu...",
                                     required = "required"
                                 })
@@ -64,8 +65,9 @@
                                 <label for="DetailLines" class="form-label fw-bold">
                                     <i class="fas fa-list me-2 text-warning"></i>Gezi Detayları
                                 </label>
-                                @Html.TextAreaFor(m => m.DetailLines, new { 
-                                    @class = "form-control", 
+                                @Html.TextAreaFor(m => m.DetailLines, new
+                                {
+                                    @class = "form-control",
                                     rows = "8",
                                     placeholder = "Her satıra bir detay yazın... Ornek: 1. Sabah 09:00 - Topkapı Sarayı"
                                 })
@@ -133,35 +135,35 @@
 </div>
 
 <style>
-.card {
-    border-radius: 15px;
-}
+    .card {
+        border-radius: 15px;
+    }
 
-.form-control {
-    border-radius: 10px;
-    border: 2px solid #e9ecef;
-    transition: all 0.3s ease;
-}
+    .form-control {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
 
-.form-control:focus {
-    border-color: #ffc107;
-    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
-}
+        .form-control:focus {
+            border-color: #ffc107;
+            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+        }
 
-.btn {
-    border-radius: 10px;
-    padding: 12px 24px;
-    font-weight: 500;
-}
+    .btn {
+        border-radius: 10px;
+        padding: 12px 24px;
+        font-weight: 500;
+    }
 
-.alert {
-    border-radius: 15px;
-}
+    .alert {
+        border-radius: 15px;
+    }
 
-.form-check-input:checked {
-    background-color: #ffc107;
-    border-color: #ffc107;
-}
+    .form-check-input:checked {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
 </style>
 
 @section scripts {

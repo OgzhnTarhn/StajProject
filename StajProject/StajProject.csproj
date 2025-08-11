@@ -256,6 +256,8 @@
     <Content Include="Views\Account\EditProfile.cshtml" />
     <Content Include="Views\Block\Index.cshtml" />
     <Content Include="Views\Block\Details.cshtml" />
+    <Content Include="Views\Block\Edit.cshtml" />
+    <Content Include="Views\Block\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
