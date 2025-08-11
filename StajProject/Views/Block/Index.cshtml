@@ -200,17 +200,27 @@
 @section scripts {
     <script>
         function deleteTrip(blockId, title) {
+            console.log('deleteTrip called with:', blockId, title);
+            
             if (confirm('Are you sure you want to delete the trip "' + title + '"?\n\nThis action cannot be undone.')) {
                 // Create a form to submit the delete request
                 var form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '@Url.Action("Delete", "Block")';
                 
-                // Add anti-forgery token
+                // Add anti-forgery token - get it from the page
                 var token = document.createElement('input');
                 token.type = 'hidden';
                 token.name = '__RequestVerificationToken';
-                token.value = $('input[name="__RequestVerificationToken"]').val();
+                var tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+                if (tokenElement) {
+                    token.value = tokenElement.value;
+                    console.log('Token found:', token.value.substring(0, 10) + '...');
+                } else {
+                    console.error('Anti-forgery token not found!');
+                    alert('Security token not found. Please refresh the page and try again.');
+                    return;
+                }
                 form.appendChild(token);
                 
                 // Add block ID
@@ -219,6 +229,10 @@
                 idInput.name = 'id';
                 idInput.value = blockId;
                 form.appendChild(idInput);
+                
+                console.log('Form created, submitting...');
+                console.log('Form action:', form.action);
+                console.log('Form data:', { id: blockId, token: token.value.substring(0, 10) + '...' });
                 
                 // Submit the form
                 document.body.appendChild(form);

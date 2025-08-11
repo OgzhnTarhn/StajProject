@@ -118,11 +118,11 @@
             </div>
 
             <div class="col-lg-4">
-                <!-- Gezi Bilgileri -->
+                <!-- Trip Information -->
                 <div class="card border-0 shadow mb-4">
                     <div class="card-header bg-white border-0 py-4">
                         <h5 class="mb-0">
-                            <i class="fas fa-info-circle me-2 text-info"></i>Gezi Bilgileri
+                            <i class="fas fa-info-circle me-2 text-info"></i>Trip Information
                         </h5>
                     </div>
                     <div class="card-body">
@@ -138,7 +138,7 @@
                                 <p class="mb-0 fw-bold">@header.Mandt</p>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label text-muted small">Oluşturulma Tarihi</label>
+                                <label class="form-label text-muted small">Creation Date</label>
                                 <p class="mb-0 fw-bold">
                                     @if (!string.IsNullOrWhiteSpace(header.Erdat))
                                     {
@@ -148,12 +148,12 @@
                                     }
                                     else
                                     {
-                                        <span class="text-muted">Belirtilmemiş</span>
+                                        <span class="text-muted">Not Specified</span>
                                     }
                                 </p>
                             </div>
                             <div class="mb-0">
-                                <label class="form-label text-muted small">Son Güncelleme</label>
+                                <label class="form-label text-muted small">Last Update</label>
                                 <p class="mb-0 fw-bold">
                                     @if (!string.IsNullOrWhiteSpace(header.Aedat) && header.Aedat != "0000-00-00")
                                     {
@@ -163,7 +163,7 @@
                                     }
                                     else
                                     {
-                                        <span class="text-muted">Güncellenmemiş</span>
+                                        <span class="text-muted">Not Updated</span>
                                     }
                                 </p>
                             </div>
@@ -171,11 +171,11 @@
                     </div>
                 </div>
 
-                <!-- İstatistikler -->
+                <!-- Statistics -->
                 <div class="card border-0 shadow">
                     <div class="card-header bg-white border-0 py-4">
                         <h5 class="mb-0">
-                            <i class="fas fa-chart-bar me-2 text-success"></i>İstatistikler
+                            <i class="fas fa-chart-bar me-2 text-success"></i>Statistics
                         </h5>
                     </div>
                     <div class="card-body">
@@ -183,13 +183,13 @@
                             <div class="col-6">
                                 <div class="mb-3">
                                     <h3 class="text-primary mb-1">@(Model.Details?.Count ?? 0)</h3>
-                                    <small class="text-muted">Toplam Detay</small>
+                                    <small class="text-muted">Total Details</small>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="mb-3">
                                     <h3 class="text-success mb-1">@(Model.Headers?.Count ?? 0)</h3>
-                                    <small class="text-muted">Header</small>
+                                    <small class="text-muted">Headers</small>
                                 </div>
                             </div>
                         </div>
