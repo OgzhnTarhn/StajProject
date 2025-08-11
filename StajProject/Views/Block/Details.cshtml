@@ -27,9 +27,9 @@
                     @if (Session["Role"] != null && Session["Role"].ToString() == "A")
                     {
                         <div class="btn-group" role="group">
-                            <button class="btn btn-light btn-lg" title="Düzenle (Henüz hazır değil)" disabled>
+                            <a href="@Url.Action("Edit", "Block", new { id = Model.Headers[0].BlockId })" class="btn btn-light btn-lg" title="Gezi Düzenle">
                                 <i class="fas fa-edit me-2"></i>Düzenle
-                            </button>
+                            </a>
                             <button class="btn btn-outline-light btn-lg" title="Sil (Henüz hazır değil)" disabled>
                                 <i class="fas fa-trash me-2"></i>Sil
                             </button>

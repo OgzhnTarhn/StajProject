@@ -173,7 +173,32 @@ namespace StajProject.Controllers
                 throw new Exception("Block oluşturulurken hata: " + ex.Message);
             }
         }
+        public bool UpdateBlock(string blockId, string title, bool replaceDetails, IList<string> detailLines = null)
+        {
+            var dest = GetDestination();
+            var repo = dest.Repository;
+            var func = repo.CreateFunction("ZBLOCK_UPDATE");
 
+            func.SetValue("IV_BLOCK_ID", blockId ?? "");
+            if (!string.IsNullOrWhiteSpace(title))
+                func.SetValue("IV_TITLE", title);
+
+            func.SetValue("IV_REPLACE_DTL", replaceDetails ? "X" : "");
+
+            IRfcTable itDtl = func.GetTable("IT_DTL");
+            if (replaceDetails && detailLines != null)
+            {
+                foreach (var line in detailLines)
+                {
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+                    itDtl.Append();
+                    itDtl.SetValue("LINE_TEXT", line.Trim());
+                }
+            }
+
+            func.Invoke(dest);
+            return func.GetString("EV_UPDATED") == "X";
+        }
 
     }
 }

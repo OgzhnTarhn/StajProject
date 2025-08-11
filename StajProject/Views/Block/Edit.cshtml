@@ -1,0 +1,194 @@
+@model StajProject.Models.EditBlockVm
+
+@{
+    ViewBag.Title = "Gezi Düzenle";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Admin Kontrolü -->
+            @if (Session["Role"] == null || Session["Role"].ToString() != "A")
+            {
+                <div class="alert alert-danger text-center" role="alert">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+                    <h4 class="alert-heading">Erişim Reddedildi!</h4>
+                    <p class="mb-0">Bu sayfaya sadece admin kullanıcılar erişebilir.</p>
+                    <hr>
+                    <a href="@Url.Action("Index", "Block")" class="btn btn-outline-danger">
+                        <i class="fas fa-arrow-left me-2"></i>Geri Dön
+                    </a>
+                </div>
+            }
+            else
+            {
+                <!-- Hero Section -->
+                <div class="text-center mb-5">
+                    <h1 class="display-4 fw-bold text-warning">
+                        <i class="fas fa-edit me-3"></i>Gezi Düzenle
+                    </h1>
+                    <p class="lead text-muted">Mevcut gezi planını düzenlemek için aşağıdaki formu kullanın.</p>
+                </div>
+
+                <!-- Form Card -->
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-warning text-dark py-3">
+                        <h5 class="mb-0">
+                            <i class="fas fa-edit me-2"></i>Gezi Bilgilerini Düzenle
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        @using (Html.BeginForm("Edit", "Block", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(m => m.BlockId)
+
+                            <!-- Başlık -->
+                            <div class="mb-4">
+                                <label for="Title" class="form-label fw-bold">
+                                    <i class="fas fa-heading me-2 text-warning"></i>Gezi Başlığı
+                                </label>
+                                @Html.TextBoxFor(m => m.Title, new { 
+                                    @class = "form-control form-control-lg", 
+                                    placeholder = "Orn: İstanbul Gezisi, Kapadokya Turu...",
+                                    required = "required"
+                                })
+                                @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>Gezi planınızı en iyi şekilde tanımlayan bir başlık girin.
+                                </div>
+                            </div>
+
+                            <!-- Detay Satırları -->
+                            <div class="mb-4">
+                                <label for="DetailLines" class="form-label fw-bold">
+                                    <i class="fas fa-list me-2 text-warning"></i>Gezi Detayları
+                                </label>
+                                @Html.TextAreaFor(m => m.DetailLines, new { 
+                                    @class = "form-control", 
+                                    rows = "8",
+                                    placeholder = "Her satıra bir detay yazın... Ornek: 1. Sabah 09:00 - Topkapı Sarayı"
+                                })
+                                @Html.ValidationMessageFor(m => m.DetailLines, "", new { @class = "text-danger" })
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>Her satıra bir gezi detayı yazın. Boş satırlar otomatik olarak atlanacaktır.
+                                </div>
+                            </div>
+
+                            <!-- Detay Değiştirme Seçeneği -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    @Html.CheckBoxFor(m => m.ReplaceDetails, new { @class = "form-check-input" })
+                                    <label class="form-check-label fw-bold" for="ReplaceDetails">
+                                        <i class="fas fa-sync-alt me-2 text-warning"></i>Mevcut detayları tamamen değiştir
+                                    </label>
+                                </div>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>Bu seçenek işaretlenirse, mevcut tüm detaylar yeni detaylarla değiştirilir.
+                                </div>
+                            </div>
+
+                            <!-- Butonlar -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="@Url.Action("Details", "Block", new { id = Model.BlockId })" class="btn btn-outline-secondary btn-lg">
+                                    <i class="fas fa-arrow-left me-2"></i>İptal
+                                </a>
+                                <button type="submit" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-save me-2"></i>Değişiklikleri Kaydet
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Yardım Kartı -->
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-body">
+                        <h6 class="card-title text-warning">
+                            <i class="fas fa-lightbulb me-2"></i>Düzenleme İpuçları
+                        </h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Başlık:</strong> Kısa ama açıklayıcı olmalı
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Detaylar:</strong> Her satıra bir aktivite yazın
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Değiştirme:</strong> Detayları değiştirmek istiyorsanız checkbox'ı işaretleyin
+                            </li>
+                            <li class="mb-0">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Öncelik:</strong> Önemli yerleri önce yazın
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 15px;
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
+.btn {
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 500;
+}
+
+.alert {
+    border-radius: 15px;
+}
+
+.form-check-input:checked {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+</style>
+
+@section scripts {
+    <script>
+        // Form validation için Bootstrap
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+
+        // Checkbox değişikliğinde kullanıcıya bilgi ver
+        document.getElementById('ReplaceDetails').addEventListener('change', function() {
+            if (this.checked) {
+                if (!confirm('Mevcut tüm detaylar silinecek ve yeni detaylarla değiştirilecek. Emin misiniz?')) {
+                    this.checked = false;
+                }
+            }
+        });
+    </script>
+}

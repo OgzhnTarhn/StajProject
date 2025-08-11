@@ -84,6 +84,50 @@ namespace StajProject.Controllers
                 return View(model);
             }
         }
+        [HttpGet]
+        [AdminOnly]
+        public ActionResult Edit(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return RedirectToAction("Index");
+            var data = _sapController.GetBlocks(id);
+
+            var m = new EditBlockVm
+            {
+                BlockId = id,
+                Title = data.Headers.Count > 0 ? data.Headers[0].Title : "",
+                // mevcut detayları textarea'ya koymak istersen:
+                DetailLines = string.Join("\n", data.Details.ConvertAll(d => d.LineText))
+            };
+            return View(m);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        [AdminOnly]
+        public ActionResult Edit(EditBlockVm model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var lines = ParseLines(model.DetailLines);
+            var ok = _sapController.UpdateBlock(model.BlockId, model.Title, model.ReplaceDetails, lines);
+            if (!ok) ModelState.AddModelError("", "Güncelleme başarısız");
+
+            return RedirectToAction("Details", new { id = model.BlockId });
+        }
+
+        // Helper method to parse lines from textarea
+        private List<string> ParseLines(string detailLines)
+        {
+            var lines = new List<string>();
+            if (!string.IsNullOrWhiteSpace(detailLines))
+            {
+                foreach (var line in detailLines.Split('\n'))
+                {
+                    if (!string.IsNullOrWhiteSpace(line))
+                        lines.Add(line.Trim());
+                }
+            }
+            return lines;
+        }
 
     }
 }

@@ -154,9 +154,11 @@
                                                    title="Detayları Görüntüle">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <button class="btn btn-outline-secondary btn-sm" title="Düzenle (Henüz hazır değil)" disabled>
+                                                <a class="btn btn-outline-secondary btn-sm" 
+                                                   href="@Url.Action("Edit", "Block", new { id = item.BlockId })"
+                                                   title="Gezi Düzenle">
                                                     <i class="fas fa-edit"></i>
-                                                </button>
+                                                </a>
                                                 <button class="btn btn-outline-danger btn-sm" title="Sil (Henüz hazır değil)" disabled>
                                                     <i class="fas fa-trash"></i>
                                                 </button>

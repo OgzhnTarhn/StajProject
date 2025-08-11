@@ -8,9 +8,11 @@
 <div class="container mt-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Kullanıcı Listesi</h2>
+        <h2><i class="fas fa-users me-2"></i>Kullanıcı Listesi (Sadece Görüntüleme)</h2>
         <div>
-            <a href="@Url.Action("AddUser", "Admin")" class="btn btn-success me-2">+ Yeni Kullanıcı</a>
+            <a href="@Url.Action("Index", "Block")" class="btn btn-primary me-2">
+                <i class="fas fa-map-marked-alt me-1"></i>Gezilere Dön
+            </a>
             <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger">Çıkış Yap</a>
         </div>
     </div>
@@ -45,12 +47,7 @@
                         <td>@user.Username</td>
                         <td>@(user.Role == "A" ? "Admin" : "User")</td>
                         <td>
-                            <a href="@Url.Action("EditUser", "Admin", new { username = user.Username })" class="btn btn-warning btn-sm">Düzenle</a>
-                            <a href="@Url.Action("DeleteUser", "Admin", new { username = user.Username })"
-                               class="btn btn-danger btn-sm ms-1"
-                               onclick="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?');">
-                                Sil
-                            </a>
+                            <span class="badge bg-info">Sadece Görüntüleme</span>
                         </td>
                     </tr>
                 }
