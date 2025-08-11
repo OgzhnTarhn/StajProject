@@ -61,6 +61,12 @@
                                 <li><strong>Header[0].BlockId:</strong> @Model.Headers[0].BlockId</li>
                                 <li><strong>Header[0].Title:</strong> @Model.Headers[0].Title</li>
                             }
+                            @if (Model.Details != null && Model.Details.Count > 0)
+                            {
+                                <li><strong>Detail[0].SeqNo:</strong> '@Model.Details[0].SeqNo'</li>
+                                <li><strong>Detail[0].LineText:</strong> '@Model.Details[0].LineText'</li>
+                                <li><strong>Detail[0].DetailId:</strong> '@Model.Details[0].DetailId'</li>
+                            }
                         </ul>
                     </div>
                     
@@ -69,15 +75,13 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Sıra No</th>
-                                    <th>Detay Metni (LineText)</th>
+                                    <th>Detay Metni</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var detail in Model.Details)
                                 {
                                     <tr>
-                                        <td><strong>@detail.SeqNo</strong></td>
                                         <td>@detail.LineText</td>
                                     </tr>
                                 }
