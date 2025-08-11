@@ -38,7 +38,7 @@ public class AccountController : Controller
                     Session["Password"] = model.Password; // Bunu EKELE! (user dashboard için lazım)
 
                     if (model.Role == "A")
-                        return RedirectToAction("Dashboard", "Admin");
+                        return RedirectToAction("Index", "Block"); // Admin direkt Geziler sayfasına
                     else if (model.Role == "U")
                         return RedirectToAction("Index", "Block");
 

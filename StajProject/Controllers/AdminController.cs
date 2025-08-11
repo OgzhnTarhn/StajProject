@@ -64,7 +64,7 @@ public class AdminController : Controller
 
                 func.Invoke(dest);
                 ViewBag.Message = func.GetString("EV_RESULT");
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Index", "Block"); // Admin işlem sonrası Geziler sayfasına
             }
             catch (RfcAbapException ex)
             {
@@ -108,7 +108,7 @@ public class AdminController : Controller
 
                 model.Message = func.GetString("EV_RESULT");
                 TempData["Message"] = model.Message;
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Index", "Block"); // Admin işlem sonrası Geziler sayfasına
             }
             catch (RfcAbapException ex)
             {
@@ -144,7 +144,7 @@ public class AdminController : Controller
             TempData["Message"] = "SAP Hatası: " + ex.Message;
         }
 
-        return RedirectToAction("Dashboard");
+        return RedirectToAction("Index", "Block"); // Admin işlem sonrası Geziler sayfasına
     }
 
 }
