@@ -1,20 +1,113 @@
 ﻿@model StajProject.Models.BlockVm
-@using System.Linq
 
 @{
     ViewBag.Title = "Gezi Detayları";
 }
 
-<h2>@(Model.Headers != null && Model.Headers.Count > 0 ? Model.Headers[0].Title : "")</h2>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        @if (Model.Headers != null && Model.Headers.Count > 0)
+                        {
+                            @Model.Headers[0].Title
+                        }
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>Block ID:</strong> 
+                                @if (Model.Headers != null && Model.Headers.Count > 0)
+                                {
+                                    @Model.Headers[0].BlockId
+                                }
+                            </p>
+                            <p><strong>Oluşturulma Tarihi:</strong> 
+                                @if (Model.Headers != null && Model.Headers.Count > 0)
+                                {
+                                    @Model.Headers[0].Erdat
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Mandant:</strong> 
+                                @if (Model.Headers != null && Model.Headers.Count > 0)
+                                {
+                                    @Model.Headers[0].Mandt
+                                }
+                            </p>
+                            <p><strong>Düzenlenme Tarihi:</strong> 
+                                @if (Model.Headers != null && Model.Headers.Count > 0)
+                                {
+                                    @Model.Headers[0].Aedat
+                                }
+                            </p>
+                        </div>
+                    </div>
 
-
-<ul class="list-group">
-    @foreach (var detail in Model.Details)
-    {
-        <li class="list-group-item">
-            @detail.SeqNo - @detail.LineText
-        </li>
-    }
-</ul>
-
-<a href="@Url.Action("Index", "Block")" class="btn btn-secondary mt-3">← Geri</a>
+                    <h4>Gezi Detayları</h4>
+                    
+                    <!-- Debug Bilgileri -->
+                    <div class="alert alert-secondary mb-3">
+                        <h6>Debug Bilgileri:</h6>
+                        <ul class="mb-0">
+                            <li><strong>Model.Headers:</strong> @(Model.Headers?.Count ?? 0) adet</li>
+                            <li><strong>Model.Details:</strong> @(Model.Details?.Count ?? 0) adet</li>
+                            @if (Model.Headers != null && Model.Headers.Count > 0)
+                            {
+                                <li><strong>Header[0].BlockId:</strong> @Model.Headers[0].BlockId</li>
+                                <li><strong>Header[0].Title:</strong> @Model.Headers[0].Title</li>
+                            }
+                        </ul>
+                    </div>
+                    
+                    @if (Model.Details != null && Model.Details.Count > 0)
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Sıra No</th>
+                                    <th>Detay Metni (LineText)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var detail in Model.Details)
+                                {
+                                    <tr>
+                                        <td><strong>@detail.SeqNo</strong></td>
+                                        <td>@detail.LineText</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        
+                        <p class="text-muted">
+                            Toplam @Model.Details.Count detay bulundu.
+                        </p>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <h5>Detay Bilgileri Bulunamadı</h5>
+                            <p>Bu gezi için SAP'den detay verisi gelmemiş. Muhtemelen:</p>
+                            <ul>
+                                <li>SAP fonksiyonu ZBLOCK_GET detay tablosunu döndürmüyor</li>
+                                <li>ET_DTL tablosu boş geliyor</li>
+                                <li>Field mapping'de sorun olabilir</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Örnek Detaylar (Test için) -->
+                      
+                    }
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("Index", "Block")" class="btn btn-secondary">← Geri</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

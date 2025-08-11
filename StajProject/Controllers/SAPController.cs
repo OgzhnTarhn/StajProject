@@ -84,29 +84,60 @@ namespace StajProject.Controllers
 
                 // HEADER tablosu
                 IRfcTable etHdr = func.GetTable("ET_HDR");
+                System.Diagnostics.Debug.WriteLine($"SAP Header Table Count: {etHdr.Count}");
+                
                 foreach (IRfcStructure row in etHdr)
                 {
+                    var erdat = row.GetString("ERDAT");
+                    var aedat = row.GetString("AEDAT");
+                    
+                    // Debug: Log the actual values received from SAP
+                    System.Diagnostics.Debug.WriteLine($"SAP Header - ERDAT: '{erdat}', AEDAT: '{aedat}'");
+                    
                     headers.Add(new BlockHeaderModel
                     {
                         Mandt = row.GetString("MANDT"),
                         BlockId = row.GetString("BLOCK_ID"),
                         Title = row.GetString("TITLE"),
-                        Erdat = row.GetString("ERDAT"),
-                        Aedat = row.GetString("AEDAT")
+                        Erdat = erdat,
+                        Aedat = aedat
                     });
                 }
 
                 // DETAIL tablosu
                 IRfcTable etDtl = func.GetTable("ET_DTL");
+                System.Diagnostics.Debug.WriteLine($"SAP Detail Table Count: {etDtl.Count}");
+                
+                if (etDtl.Count == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("WARNING: ET_DTL table is empty! Checking available tables...");
+                    
+                    // Check what tables are available in the function
+                    var availableTables = func.GetTableNames();
+                    System.Diagnostics.Debug.WriteLine($"Available tables: {string.Join(", ", availableTables)}");
+                    
+                    // Check if there are any other detail-related tables
+                    foreach (var tableName in availableTables)
+                    {
+                        var table = func.GetTable(tableName);
+                        System.Diagnostics.Debug.WriteLine($"Table {tableName}: {table.Count} rows");
+                    }
+                }
+                
                 foreach (IRfcStructure row in etDtl)
                 {
+                    var seqNo = row.GetString("SEQ_NO");
+                    var lineText = row.GetString("LINE_TEXT");
+                    
+                    System.Diagnostics.Debug.WriteLine($"SAP Detail - SEQ_NO: '{seqNo}', LINE_TEXT: '{lineText}'");
+                    
                     details.Add(new BlockDetailModel
                     {
                         Mandt = row.GetString("MANDT"),
                         DetailId = row.GetString("DETAIL_ID"),
                         BlockId = row.GetString("BLOCK_ID"),
-                        SeqNo = row.GetString("SEQ_NO"),
-                        LineText = row.GetString("LINE_TEXT"),
+                        SeqNo = seqNo,
+                        LineText = lineText,
                         Erdat = row.GetString("ERDAT"),
                         Aedat = row.GetString("AEDAT")
                     });

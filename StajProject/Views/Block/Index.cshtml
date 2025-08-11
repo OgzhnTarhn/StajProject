@@ -4,35 +4,167 @@
     // SAP DATS -> dd.MM.yyyy
     string SapDate(string d)
     {
-        if (string.IsNullOrWhiteSpace(d) || d.Length != 8) return "";
-        return $"{d.Substring(6, 2)}.{d.Substring(4, 2)}.{d.Substring(0, 4)}";
+        if (string.IsNullOrWhiteSpace(d)) return "-";
+        
+        // SAP DATS format: YYYYMMDD
+        if (d.Length == 8 && d.All(char.IsDigit))
+        {
+            return $"{d.Substring(6, 2)}.{d.Substring(4, 2)}.{d.Substring(0, 4)}";
+        }
+        
+        // If it's already in a different format, return as is
+        return d;
     }
 }
 
-<h2>Geziler</h2>
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>Başlık</th>
-            <th>Oluşturma Tarihi</th>
-            <th>Güncelleme Tarihi</th>
-            <th style="width:120px;"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="bg-gradient-primary text-white py-5 mb-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-map-marked-alt me-3"></i>Geziler
+                    </h1>
+                    <p class="lead mb-0">Tüm gezi planlarınızı buradan görüntüleyebilir ve yönetebilirsiniz.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <button class="btn btn-light btn-lg">
+                        <i class="fas fa-plus me-2"></i>Yeni Gezi Ekle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="container">
+        @if (!Model.Any())
         {
-            <tr>
-                <td>@item.Title</td>
-                <td>@SapDate(item.Erdat)</td>   <!-- burada yazdırıyoruz -->
-                <td>@SapDate(item.Aedat)</td>
-                <td>
-                    <a class="btn btn-primary btn-sm"
-                       href="@Url.Action("Details", "Block", new { id = item.BlockId })">
-                        Detay
-                    </a>
-                </td>
-            </tr>
+            <div class="text-center py-5">
+                <div class="mb-4">
+                    <i class="fas fa-map text-muted" style="font-size: 64px;"></i>
+                </div>
+                <h3 class="text-muted mb-3">Henüz Gezi Bulunmuyor</h3>
+                <p class="text-muted mb-4">İlk gezi planınızı oluşturmaya başlayın.</p>
+                <button class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus me-2"></i>İlk Geziyi Oluştur
+                </button>
+            </div>
         }
-    </tbody>
-</table>
+        else
+        {
+            <div class="card border-0 shadow">
+                <div class="card-header bg-white border-0 py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">
+                            <i class="fas fa-list me-2 text-primary"></i>Gezi Listesi
+                        </h3>
+                        <span class="badge bg-primary fs-6 px-3 py-2">@Model.Count toplam</span>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="border-0 px-4 py-3">
+                                        <i class="fas fa-heading me-2 text-primary"></i>Başlık
+                                    </th>
+                                    <th class="border-0 px-4 py-3">
+                                        <i class="fas fa-calendar-plus me-2 text-success"></i>Oluşturma Tarihi
+                                    </th>
+                                    <th class="border-0 px-4 py-3">
+                                        <i class="fas fa-edit me-2 text-info"></i>Güncelleme Tarihi
+                                    </th>
+                                    <th class="border-0 px-4 py-3 text-end" style="width: 150px;">
+                                        <i class="fas fa-cogs me-2 text-secondary"></i>İşlemler
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-map-marker-alt text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0 fw-bold">@item.Title</h6>
+                                                    <small class="text-muted">ID: @item.BlockId</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <div class="d-flex align-items-center">
+                                                @if (!string.IsNullOrWhiteSpace(item.Erdat))
+                                                {
+                                                    <span class="badge bg-success bg-opacity-10 text-success px-3 py-2">
+                                                        <i class="fas fa-calendar me-1"></i>@SapDate(item.Erdat)
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">
+                                                        <i class="fas fa-calendar-times me-1"></i>Belirtilmemiş
+                                                    </span>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <div class="d-flex align-items-center">
+                                                @if (!string.IsNullOrWhiteSpace(item.Aedat) && item.Aedat != "0000-00-00")
+                                                {
+                                                    <span class="badge bg-info bg-opacity-10 text-info px-3 py-2">
+                                                        <i class="fas fa-edit me-1"></i>@SapDate(item.Aedat)
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">
+                                                        <i class="fas fa-minus me-1"></i>Güncellenmemiş
+                                                    </span>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 text-end">
+                                            <div class="btn-group" role="group">
+                                                <a class="btn btn-outline-primary btn-sm" 
+                                                   href="@Url.Action("Details", "Block", new { id = item.BlockId })"
+                                                   title="Detayları Görüntüle">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <button class="btn btn-outline-secondary btn-sm" title="Düzenle">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline-danger btn-sm" title="Sil">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.table > :not(caption) > * > * {
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: rgba(0,0,0,.02);
+}
+</style>
