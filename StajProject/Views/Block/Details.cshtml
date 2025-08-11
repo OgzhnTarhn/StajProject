@@ -4,114 +4,222 @@
     ViewBag.Title = "Gezi Detayları";
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="mb-0">
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="bg-gradient-primary text-white py-5 mb-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-map-marked-alt me-3"></i>
                         @if (Model.Headers != null && Model.Headers.Count > 0)
                         {
                             @Model.Headers[0].Title
                         }
-                    </h2>
+                        else
+                        {
+                            <span>Gezi Detayları</span>
+                        }
+                    </h1>
+                    <p class="lead mb-0">Gezi planınızın tüm detaylarını buradan görüntüleyebilirsiniz.</p>
                 </div>
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <p><strong>Block ID:</strong> 
-                                @if (Model.Headers != null && Model.Headers.Count > 0)
-                                {
-                                    @Model.Headers[0].BlockId
-                                }
-                            </p>
-                            <p><strong>Oluşturulma Tarihi:</strong> 
-                                @if (Model.Headers != null && Model.Headers.Count > 0)
-                                {
-                                    @Model.Headers[0].Erdat
-                                }
-                            </p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>Mandant:</strong> 
-                                @if (Model.Headers != null && Model.Headers.Count > 0)
-                                {
-                                    @Model.Headers[0].Mandt
-                                }
-                            </p>
-                            <p><strong>Düzenlenme Tarihi:</strong> 
-                                @if (Model.Headers != null && Model.Headers.Count > 0)
-                                {
-                                    @Model.Headers[0].Aedat
-                                }
-                            </p>
-                        </div>
-                    </div>
-
-                    <h4>Gezi Detayları</h4>
-                    
-                    <!-- Debug Bilgileri -->
-                    <div class="alert alert-secondary mb-3">
-                        <h6>Debug Bilgileri:</h6>
-                        <ul class="mb-0">
-                            <li><strong>Model.Headers:</strong> @(Model.Headers?.Count ?? 0) adet</li>
-                            <li><strong>Model.Details:</strong> @(Model.Details?.Count ?? 0) adet</li>
-                            @if (Model.Headers != null && Model.Headers.Count > 0)
-                            {
-                                <li><strong>Header[0].BlockId:</strong> @Model.Headers[0].BlockId</li>
-                                <li><strong>Header[0].Title:</strong> @Model.Headers[0].Title</li>
-                            }
-                            @if (Model.Details != null && Model.Details.Count > 0)
-                            {
-                                <li><strong>Detail[0].SeqNo:</strong> '@Model.Details[0].SeqNo'</li>
-                                <li><strong>Detail[0].LineText:</strong> '@Model.Details[0].LineText'</li>
-                                <li><strong>Detail[0].DetailId:</strong> '@Model.Details[0].DetailId'</li>
-                            }
-                        </ul>
-                    </div>
-                    
-                    @if (Model.Details != null && Model.Details.Count > 0)
+                <div class="col-lg-4 text-lg-end">
+                    @if (Session["Role"] != null && Session["Role"].ToString() == "A")
                     {
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Detay Metni</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var detail in Model.Details)
-                                {
-                                    <tr>
-                                        <td>@detail.LineText</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        
-                        <p class="text-muted">
-                            Toplam @Model.Details.Count detay bulundu.
-                        </p>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-light btn-lg" title="Düzenle (Henüz hazır değil)" disabled>
+                                <i class="fas fa-edit me-2"></i>Düzenle
+                            </button>
+                            <button class="btn btn-outline-light btn-lg" title="Sil (Henüz hazır değil)" disabled>
+                                <i class="fas fa-trash me-2"></i>Sil
+                            </button>
+                        </div>
                     }
                     else
                     {
-                        <div class="alert alert-warning">
-                            <h5>Detay Bilgileri Bulunamadı</h5>
-                            <p>Bu gezi için SAP'den detay verisi gelmemiş. Muhtemelen:</p>
-                            <ul>
-                                <li>SAP fonksiyonu ZBLOCK_GET detay tablosunu döndürmüyor</li>
-                                <li>ET_DTL tablosu boş geliyor</li>
-                                <li>Field mapping'de sorun olabilir</li>
-                            </ul>
-                        </div>
-                        
-                        <!-- Örnek Detaylar (Test için) -->
-                      
+                        <span class="text-white-50">
+                            <i class="fas fa-lock me-2"></i>Sadece Admin Düzenleyebilir
+                        </span>
                     }
-                </div>
-                <div class="card-footer">
-                    <a href="@Url.Action("Index", "Block")" class="btn btn-secondary">← Geri</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Content Section -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Gezi Detayları -->
+                <div class="card border-0 shadow mb-4">
+                    <div class="card-header bg-white border-0 py-4">
+                        <h3 class="mb-0">
+                            <i class="fas fa-list me-2 text-primary"></i>Gezi Detayları
+                        </h3>
+                    </div>
+                    <div class="card-body p-0">
+                        @if (Model.Details != null && Model.Details.Count > 0)
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="border-0 px-4 py-3" style="width: 80px;">
+                                                <i class="fas fa-hashtag me-2 text-primary"></i>Sıra
+                                            </th>
+                                            <th class="border-0 px-4 py-3">
+                                                <i class="fas fa-info-circle me-2 text-primary"></i>Detay
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var detail in Model.Details)
+                                        {
+                                            <tr>
+                                                <td class="px-4 py-3">
+                                                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
+                                                        @detail.SeqNo
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                                            <i class="fas fa-map-marker-alt text-success"></i>
+                                                        </div>
+                                                        <div>
+                                                            <h6 class="mb-0">@detail.LineText</h6>
+                                                            <small class="text-muted">ID: @detail.DetailId</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <div class="mb-4">
+                                    <i class="fas fa-exclamation-triangle text-warning" style="font-size: 64px;"></i>
+                                </div>
+                                <h4 class="text-warning mb-3">Detay Bulunamadı</h4>
+                                <p class="text-muted mb-0">Bu gezi için henüz detay bilgisi eklenmemiş.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Gezi Bilgileri -->
+                <div class="card border-0 shadow mb-4">
+                    <div class="card-header bg-white border-0 py-4">
+                        <h5 class="mb-0">
+                            <i class="fas fa-info-circle me-2 text-info"></i>Gezi Bilgileri
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Headers != null && Model.Headers.Count > 0)
+                        {
+                            var header = Model.Headers[0];
+                            <div class="mb-3">
+                                <label class="form-label text-muted small">Block ID</label>
+                                <p class="mb-0 fw-bold">@header.BlockId</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-muted small">Mandant</label>
+                                <p class="mb-0 fw-bold">@header.Mandt</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-muted small">Oluşturulma Tarihi</label>
+                                <p class="mb-0 fw-bold">
+                                    @if (!string.IsNullOrWhiteSpace(header.Erdat))
+                                    {
+                                        <span class="badge bg-success bg-opacity-10 text-success">
+                                            <i class="fas fa-calendar me-1"></i>@header.Erdat
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Belirtilmemiş</span>
+                                    }
+                                </p>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label text-muted small">Son Güncelleme</label>
+                                <p class="mb-0 fw-bold">
+                                    @if (!string.IsNullOrWhiteSpace(header.Aedat) && header.Aedat != "0000-00-00")
+                                    {
+                                        <span class="badge bg-info bg-opacity-10 text-info">
+                                            <i class="fas fa-edit me-1"></i>@header.Aedat
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Güncellenmemiş</span>
+                                    }
+                                </p>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- İstatistikler -->
+                <div class="card border-0 shadow">
+                    <div class="card-header bg-white border-0 py-4">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-bar me-2 text-success"></i>İstatistikler
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <h3 class="text-primary mb-1">@(Model.Details?.Count ?? 0)</h3>
+                                    <small class="text-muted">Toplam Detay</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <h3 class="text-success mb-1">@(Model.Headers?.Count ?? 0)</h3>
+                                    <small class="text-muted">Header</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Geri Dön Butonu -->
+        <div class="text-center mt-5">
+            <a href="@Url.Action("Index", "Block")" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-arrow-left me-2"></i>Gezilere Geri Dön
+            </a>
+        </div>
+    </div>
 </div>
+
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.table > :not(caption) > * > * {
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: rgba(0,0,0,.02);
+}
+
+.badge {
+    font-size: 0.85rem;
+}
+</style>

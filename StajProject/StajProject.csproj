@@ -162,7 +162,9 @@
     <Compile Include="Attributes\StrongPasswordAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminOnlyAttribute.cs" />
     <Compile Include="Controllers\BlockController.cs" />
+    <Compile Include="Models\CreateBlockVm.cs" />
     <Compile Include="Models\BlockVm.cs" />
     <Compile Include="Models\BlockDetailModel.cs" />
     <Compile Include="Models\BlockHeaderModel.cs" />

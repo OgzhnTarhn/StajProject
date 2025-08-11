@@ -47,6 +47,7 @@ namespace StajProject.Controllers
         }
 
         [HttpGet]
+        [AdminOnly]
         public ActionResult Create()
         {
             return View(new CreateBlockVm());
@@ -54,6 +55,7 @@ namespace StajProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AdminOnly]
         public ActionResult Create(CreateBlockVm model)
         {
             if (!ModelState.IsValid) 
