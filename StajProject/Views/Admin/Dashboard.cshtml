@@ -8,8 +8,11 @@
 <div class="container mt-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-users me-2"></i>User List (View Only)</h2>
+        <h2><i class="fas fa-users me-2"></i>User Management</h2>
         <div>
+            <a href="@Url.Action("AddUser", "Admin")" class="btn btn-success me-2">
+                <i class="fas fa-plus me-1"></i>Add New User
+            </a>
             <a href="@Url.Action("Index", "Block")" class="btn btn-primary me-2">
                 <i class="fas fa-map-marked-alt me-1"></i>Back to Trips
             </a>
@@ -35,6 +38,7 @@
             <tr>
                 <th scope="col">Username</th>
                 <th scope="col">Role</th>
+                <th scope="col" style="width: 200px;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -45,15 +49,38 @@
                     <tr>
                         <td>@user.Username</td>
                         <td>@(user.Role == "A" ? "Admin" : "User")</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("EditUser", "Admin", new { username = user.Username })" 
+                                   class="btn btn-outline-warning btn-sm" title="Edit User">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-outline-danger btn-sm" 
+                                        onclick="deleteUser('@user.Username')" 
+                                        title="Delete User">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
                     </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="2" class="text-center text-muted">No registered users found.</td>
+                    <td colspan="3" class="text-center text-muted">No registered users found.</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section scripts {
+    <script>
+        function deleteUser(username) {
+            if (confirm('Are you sure you want to delete user "' + username + '"?\n\nThis action cannot be undone.')) {
+                window.location.href = '@Url.Action("DeleteUser", "Admin")?username=' + encodeURIComponent(username);
+            }
+        }
+    </script>
+}

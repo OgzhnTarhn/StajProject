@@ -34,7 +34,7 @@ public class AdminController : Controller
         }
         catch (RfcAbapException ex)
         {
-            ViewBag.ErrorMessage = "SAP Hatası: " + ex.Message;
+            ViewBag.ErrorMessage = "SAP Error: " + ex.Message;
         }
 
         return View(userList); // Views/Admin/Dashboard.cshtml
@@ -68,7 +68,7 @@ public class AdminController : Controller
             }
             catch (RfcAbapException ex)
             {
-                ViewBag.ErrorMessage = "SAP Hatası: " + ex.Message;
+                ViewBag.ErrorMessage = "SAP Error: " + ex.Message;
             }
         }
         return View(model);
@@ -81,7 +81,27 @@ public class AdminController : Controller
 
         var model = new EditUserProfileModel { Username = username };
 
-        // Kullanıcının mevcut rolünü çekmek için SAP'den veri çekebilirsin (opsiyonel)
+        // Kullanıcının mevcut rolünü SAP'den çek
+        try
+        {
+            RfcDestination dest;
+            IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_GET_USER", out dest);
+            func.SetValue("IV_USERNAME", username);
+            func.SetValue("IV_PASSWORD", ""); // Admin şifre bilmiyor
+            func.Invoke(dest);
+
+            IRfcTable etUserInfo = func.GetTable("ET_USER_INFO");
+            if (etUserInfo.Count > 0)
+            {
+                var userRow = etUserInfo[0];
+                model.Role = userRow.GetString("ROLE");
+            }
+        }
+        catch (RfcAbapException ex)
+        {
+            ViewBag.ErrorMessage = "SAP Error: " + ex.Message;
+        }
+
         return View(model);
     }
 
@@ -112,7 +132,7 @@ public class AdminController : Controller
             }
             catch (RfcAbapException ex)
             {
-                model.Message = "SAP Hatası: " + ex.Message;
+                model.Message = "SAP Error: " + ex.Message;
             }
         }
         return View(model);
@@ -141,7 +161,7 @@ public class AdminController : Controller
         }
         catch (RfcAbapException ex)
         {
-            TempData["Message"] = "SAP Hatası: " + ex.Message;
+            TempData["Message"] = "SAP Error: " + ex.Message;
         }
 
         return RedirectToAction("Index", "Block"); // Admin işlem sonrası Geziler sayfasına

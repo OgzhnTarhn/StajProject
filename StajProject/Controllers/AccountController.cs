@@ -95,7 +95,7 @@ public class AccountController : Controller
     [HttpGet]
     public ActionResult UserDashboard()
     {
-        if (Session["Role"] == null || Session["Role"].ToString() != "U")
+        if (Session["Role"] == null || (Session["Role"].ToString() != "U" && Session["Role"].ToString() != "A"))
             return RedirectToAction("Login");
 
         var userInfo = new SAPUserModel();
@@ -128,8 +128,8 @@ public class AccountController : Controller
     [HttpGet]
     public ActionResult EditProfile()
     {
-        // Session kontrolü
-        if (Session["Role"] == null || Session["Role"].ToString() != "U")
+        // Session kontrolü - Admin ve User her ikisi de erişebilir
+        if (Session["Role"] == null || (Session["Role"].ToString() != "U" && Session["Role"].ToString() != "A"))
             return RedirectToAction("Login");
 
         var model = new EditUserProfileModel { Username = Session["Username"].ToString() };
@@ -139,7 +139,7 @@ public class AccountController : Controller
     [HttpPost]
     public ActionResult EditProfile(EditUserProfileModel model)
     {
-        if (Session["Role"] == null || Session["Role"].ToString() != "U")
+        if (Session["Role"] == null || (Session["Role"].ToString() != "U" && Session["Role"].ToString() != "A"))
             return RedirectToAction("Login");
 
         if (ModelState.IsValid)

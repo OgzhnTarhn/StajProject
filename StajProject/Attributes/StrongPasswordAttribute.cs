@@ -11,22 +11,22 @@ namespace StajProject.Attributes // Eğer folder adı 'Attributes' ise
             var password = value as string;
 
             if (string.IsNullOrEmpty(password))
-                return new ValidationResult("Şifre alanı zorunludur.");
+                return new ValidationResult("Password field is required.");
 
             if (password.Length < 8)
-                return new ValidationResult("Şifre en az 8 karakter olmalı.");
+                return new ValidationResult("Password must be at least 8 characters long.");
 
             if (!password.Any(char.IsUpper))
-                return new ValidationResult("Şifre en az bir büyük harf içermeli.");
+                return new ValidationResult("Password must contain at least one uppercase letter.");
 
             if (!password.Any(char.IsLower))
-                return new ValidationResult("Şifre en az bir küçük harf içermeli.");
+                return new ValidationResult("Password must contain at least one lowercase letter.");
 
             if (!password.Any(char.IsDigit))
-                return new ValidationResult("Şifre en az bir rakam içermeli.");
+                return new ValidationResult("Password must contain at least one digit.");
 
             if (!Regex.IsMatch(password, @"[\W_]"))
-                return new ValidationResult("Şifre en az bir özel karakter içermeli.");
+                return new ValidationResult("Password must contain at least one special character.");
 
             return ValidationResult.Success;
         }

@@ -13,7 +13,17 @@
                     <h1 class="display-4 fw-bold mb-3">
                         <i class="fas fa-user-circle me-3"></i>User Dashboard
                     </h1>
-                    <p class="lead mb-0">Welcome, @Model.Username! You can manage your account information here.</p>
+                    <p class="lead mb-0">
+                        Welcome, @Model.Username! 
+                        @if (Model.Role == "A")
+                        {
+                            <span>As an admin, you have access to user management and trip administration.</span>
+                        }
+                        else
+                        {
+                            <span>You can manage your account information here.</span>
+                        }
+                    </p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
                     <div class="d-flex flex-column align-items-lg-end">
@@ -90,6 +100,12 @@
                             <a href="@Url.Action("EditProfile", "Account")" class="btn btn-outline-primary btn-lg">
                                 <i class="fas fa-user-edit me-2"></i>Edit Profile
                             </a>
+                            @if (Model.Role == "A")
+                            {
+                                <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-outline-success btn-lg">
+                                    <i class="fas fa-users me-2"></i>User Management
+                                </a>
+                            }
                             <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary btn-lg">
                                 <i class="fas fa-home me-2"></i>Home
                             </a>

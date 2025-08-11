@@ -199,6 +199,17 @@ namespace StajProject.Controllers
             func.Invoke(dest);
             return func.GetString("EV_UPDATED") == "X";
         }
+        public bool DeleteBlock(string blockId)
+        {
+            var dest = GetDestination();
+            var repo = dest.Repository;
+            var func = repo.CreateFunction("ZBLOCK_DELETE");
+
+            func.SetValue("IV_BLOCK_ID", blockId ?? "");
+            func.Invoke(dest);
+
+            return func.GetString("EV_DELETED") == "X";
+        }
 
     }
 }

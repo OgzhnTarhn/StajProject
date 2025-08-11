@@ -18,6 +18,9 @@
 }
 
 <div class="container-fluid px-0">
+    <!-- Anti-forgery token for delete operations -->
+    @Html.AntiForgeryToken()
+    
     <!-- Hero Section -->
     <div class="bg-gradient-primary text-white py-5 mb-5">
         <div class="container">
@@ -95,8 +98,8 @@
                                     <th class="border-0 px-4 py-3">
                                         <i class="fas fa-edit me-2 text-info"></i>Update Date
                                     </th>
-                                    <th class="border-0 px-4 py-3 text-end" style="width: 100px;">
-                                        <i class="fas fa-eye me-2 text-secondary"></i>View
+                                    <th class="border-0 px-4 py-3 text-end" style="width: 150px;">
+                                        <i class="fas fa-cogs me-2 text-secondary"></i>Actions
                                     </th>
                                 </tr>
                             </thead>
@@ -148,11 +151,26 @@
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 text-end">
-                                            <a class="btn btn-outline-primary btn-sm" 
-                                               href="@Url.Action("Details", "Block", new { id = item.BlockId })"
-                                               title="View Details">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
+                                            <div class="btn-group" role="group">
+                                                <a class="btn btn-outline-primary btn-sm" 
+                                                   href="@Url.Action("Details", "Block", new { id = item.BlockId })"
+                                                   title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                @if (Session["Role"] != null && Session["Role"].ToString() == "A")
+                                                {
+                                                    <a class="btn btn-outline-warning btn-sm" 
+                                                       href="@Url.Action("Edit", "Block", new { id = item.BlockId })"
+                                                       title="Edit Trip">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button class="btn btn-outline-danger btn-sm" 
+                                                            onclick="deleteTrip('@item.BlockId', '@item.Title')"
+                                                            title="Delete Trip">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                }
+                                            </div>
                                         </td>
                                     </tr>
                                 }
@@ -176,5 +194,37 @@
 
 .table-hover > tbody > tr:hover {
     background-color: rgba(0,0,0,.02);
+}
+</style>
+
+@section scripts {
+    <script>
+        function deleteTrip(blockId, title) {
+            if (confirm('Are you sure you want to delete the trip "' + title + '"?\n\nThis action cannot be undone.')) {
+                // Create a form to submit the delete request
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '@Url.Action("Delete", "Block")';
+                
+                // Add anti-forgery token
+                var token = document.createElement('input');
+                token.type = 'hidden';
+                token.name = '__RequestVerificationToken';
+                token.value = $('input[name="__RequestVerificationToken"]').val();
+                form.appendChild(token);
+                
+                // Add block ID
+                var idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'id';
+                idInput.value = blockId;
+                form.appendChild(idInput);
+                
+                // Submit the form
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
 }
 </style>

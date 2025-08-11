@@ -1,26 +1,51 @@
 ﻿@model StajProject.Models.EditUserProfileModel
 
 @{
-    ViewBag.Title = "Kullanıcı Rolü Düzenle";
+    ViewBag.Title = "Edit User Role";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container mt-5">
-    <h2>Kullanıcı Rolü Düzenle</h2>
-    @if (!string.IsNullOrEmpty(Model.Message))
-    {
-        <div class="alert alert-info">@Model.Message</div>
-    }
-    @using (Html.BeginForm())
-    {
-        <div class="mb-3">
-            <label>Kullanıcı Adı:</label>
-            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @readonly = "readonly" })
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow rounded-4 border-0">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-edit me-2"></i>Edit User Role
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.Message))
+                    {
+                        <div class="alert alert-info">@Model.Message</div>
+                    }
+                    
+                    @using (Html.BeginForm())
+                    {
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Username:</label>
+                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control form-control-lg", @readonly = "readonly" })
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Role:</label>
+                            @Html.DropDownListFor(m => m.Role, 
+                                new SelectList(new[] { 
+                                    new { Value = "A", Text = "Admin" }, 
+                                    new { Value = "U", Text = "User" } 
+                                }, "Value", "Text"), 
+                                new { @class = "form-select form-select-lg" })
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg flex-fill">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                            <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label>Rol:</label>
-            @Html.DropDownListFor(m => m.Role, new SelectList(new[] { new { Value = "A", Text = "Admin" }, new { Value = "U", Text = "User" } }, "Value", "Text"), new { @class = "form-select" })
-        </div>
-        <button type="submit" class="btn btn-primary">Kaydet</button>
-        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary ms-2">Vazgeç</a>
-    }
+    </div>
 </div>

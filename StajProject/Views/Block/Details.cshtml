@@ -5,6 +5,9 @@
 }
 
 <div class="container-fluid px-0">
+    <!-- Anti-forgery token for delete operations -->
+    @Html.AntiForgeryToken()
+    
     <!-- Hero Section -->
     <div class="bg-gradient-primary text-white py-5 mb-5">
         <div class="container">
@@ -27,11 +30,13 @@
                     @if (Session["Role"] != null && Session["Role"].ToString() == "A")
                     {
                         <div class="btn-group" role="group">
-                            <a href="@Url.Action("Edit", "Block", new { id = Model.Headers[0].BlockId })" class="btn btn-light btn-lg" title="Gezi Düzenle">
-                                <i class="fas fa-edit me-2"></i>Düzenle
+                            <a href="@Url.Action("Edit", "Block", new { id = Model.Headers[0].BlockId })" class="btn btn-light btn-lg" title="Edit Trip">
+                                <i class="fas fa-edit me-2"></i>Edit
                             </a>
-                            <button class="btn btn-outline-light btn-lg" title="Sil (Henüz hazır değil)" disabled>
-                                <i class="fas fa-trash me-2"></i>Sil
+                            <button class="btn btn-outline-light btn-lg" 
+                                    onclick="deleteTrip('@Model.Headers[0].BlockId', '@Model.Headers[0].Title')"
+                                    title="Delete Trip">
+                                <i class="fas fa-trash me-2"></i>Delete
                             </button>
                         </div>
                     }
@@ -223,3 +228,34 @@
     font-size: 0.85rem;
 }
 </style>
+
+@section scripts {
+    <script>
+        function deleteTrip(blockId, title) {
+            if (confirm('Are you sure you want to delete the trip "' + title + '"?\n\nThis action cannot be undone.')) {
+                // Create a form to submit the delete request
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '@Url.Action("Delete", "Block")';
+                
+                // Add anti-forgery token
+                var token = document.createElement('input');
+                token.type = 'hidden';
+                token.name = '__RequestVerificationToken';
+                token.value = $('input[name="__RequestVerificationToken"]').val();
+                form.appendChild(token);
+                
+                // Add block ID
+                var idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'id';
+                idInput.value = blockId;
+                form.appendChild(idInput);
+                
+                // Submit the form
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+}

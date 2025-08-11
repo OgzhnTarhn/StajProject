@@ -125,6 +125,39 @@ namespace StajProject.Controllers
 
             return RedirectToAction("Details", new { id = model.BlockId });
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AdminOnly]
+        public ActionResult Delete(string id)
+        {
+            // Session kontrolü
+            if (Session["Username"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (string.IsNullOrEmpty(id)) 
+                return RedirectToAction("Index");
+
+            try
+            {
+                var ok = _sapController.DeleteBlock(id);
+                if (ok)
+                {
+                    TempData["SuccessMessage"] = "Trip deleted successfully!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Failed to delete trip.";
+                }
+            }
+            catch (System.Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error deleting trip: " + ex.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
 
         // Helper method to parse lines from textarea
         private List<string> ParseLines(string detailLines)

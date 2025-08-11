@@ -1,34 +1,91 @@
 ﻿@model StajProject.Models.EditUserProfileModel
 
 @{
-    ViewBag.Title = "Profili Düzenle";
+    ViewBag.Title = "Edit Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userRole = Session["Role"] != null ? Session["Role"].ToString() : "";
+    
+    string userFields = "";
+    string adminNote = "";
+    
+    if (userRole == "U")
+    {
+        userFields = @"
+            <div class='mb-4'>
+                <label class='form-label fw-bold'>Current Password (for verification):</label>
+                <input type='password' name='OldPassword' class='form-control form-control-lg' />
+            </div>
+            <div class='mb-4'>
+                <label class='form-label fw-bold'>New Username (optional):</label>
+                <input type='text' name='NewUsername' class='form-control form-control-lg' placeholder='Leave empty if no change' />
+            </div>
+            <div class='mb-4'>
+                <label class='form-label fw-bold'>New Password (optional):</label>
+                <input type='password' name='NewPassword' class='form-control form-control-lg' placeholder='Leave empty if no change' />
+            </div>";
+    }
+    
+    if (userRole == "A")
+    {
+        adminNote = @"
+            <div class='alert alert-info'>
+                <i class='fas fa-info-circle me-2'></i>
+                <strong>Admin Note:</strong> As an admin user, you can change your password and username. 
+                Use the fields below to update your profile.
+            </div>";
+        
+        userFields = @"
+            <div class='mb-4'>
+                <label class='form-label fw-bold'>Current Password (for verification):</label>
+                <input type='password' name='OldPassword' class='form-control form-control-lg' />
+            </div>
+            <div class='mb-4'>
+                <label class='form-label fw-bold'>New Username (optional):</label>
+                <input type='text' name='NewUsername' class='form-control form-control-lg' placeholder='Leave empty if no change' />
+            </div>
+            <div class='mb-4'>
+                <label class='form-label fw-bold'>New Password (optional):</label>
+                <input type='password' name='NewPassword' class='form-control form-control-lg' placeholder='Leave empty if no change' />
+            </div>";
+    }
 }
-<div class="container mt-5">
-    <h2>Profili Düzenle</h2>
-    @if (!string.IsNullOrEmpty(Model.Message))
-    {
-        <div class="alert alert-info">@Model.Message</div>
-    }
-    @using (Html.BeginForm())
-    {
-        <div class="mb-3">
-            <label>Kullanıcı Adı (Mevcut):</label>
-            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @readonly = "readonly" })
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow rounded-4 border-0">
+                <div class="card-header bg-info text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-edit me-2"></i>Edit Profile
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.Message))
+                    {
+                        <div class="alert alert-info">@Model.Message</div>
+                    }
+                    
+                    @using (Html.BeginForm())
+                    {
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Current Username:</label>
+                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control form-control-lg", @readonly = "readonly" })
+                        </div>
+                        
+                        @Html.Raw(userFields)
+                        @Html.Raw(adminNote)
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-info btn-lg flex-fill">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                            <a href="@Url.Action("UserDashboard", "Account")" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label>Eski Şifre (Doğrulama için):</label>
-            @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
-        </div>
-        <div class="mb-3">
-            <label>Yeni Kullanıcı Adı (değiştirmek istiyorsan):</label>
-            @Html.TextBoxFor(m => m.NewUsername, new { @class = "form-control" })
-        </div>
-        <div class="mb-3">
-            <label>Yeni Şifre (değiştirmek istiyorsan):</label>
-            @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control" })
-        </div>
-        <button type="submit" class="btn btn-primary">Kaydet</button>
-        <a href="@Url.Action("UserDashboard", "Account")" class="btn btn-secondary ms-2">Vazgeç</a>
-    }
+    </div>
 </div>

@@ -4,7 +4,7 @@ namespace StajProject.Models
 {
     public class RegisterModel
     {
-        [Required(ErrorMessage = "Kullanıcı adı zorunlu.")]
+        [Required(ErrorMessage = "Username is required.")]
         public string Username { get; set; }
 
         [StrongPassword] // Yeterli! Mesajları attribute yönetiyor.

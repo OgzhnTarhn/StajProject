@@ -1,8 +1,8 @@
 ﻿@model StajProject.Models.RegisterModel
 
 @{
-    ViewBag.Title = "Yeni Kullanıcı Ekle";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Layout dosyanıza göre değiştirin
+    ViewBag.Title = "Add New User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container py-5">
@@ -10,7 +10,7 @@
         <div class="col-lg-5 col-md-7">
             <div class="card shadow rounded-4 border-0">
                 <div class="card-body p-5">
-                    <h3 class="text-center mb-4 fw-bold">Yeni Kullanıcı Ekle</h3>
+                    <h3 class="text-center mb-4 fw-bold">Add New User</h3>
 
                     @if (!string.IsNullOrEmpty(ViewBag.Message))
                     {
@@ -24,30 +24,30 @@
                     @using (Html.BeginForm())
                     {
                         <div class="mb-3">
-                            @Html.LabelFor(m => m.Username, "Kullanıcı Adı", new { @class = "form-label" })
-                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Kullanıcı adı girin", autocomplete = "off" })
+                            @Html.LabelFor(m => m.Username, "Username", new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Enter username", autocomplete = "off" })
                             @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
                         </div>
                         <div class="mb-3">
-                            @Html.LabelFor(m => m.Password, "Şifre", new { @class = "form-label" })
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Şifre girin" })
+                            @Html.LabelFor(m => m.Password, "Password", new { @class = "form-label" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter password" })
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                         </div>
                         <div class="mb-3">
-                            @Html.LabelFor(m => m.Role, "Rol", new { @class = "form-label" })
+                            @Html.LabelFor(m => m.Role, "Role", new { @class = "form-label" })
                             @Html.DropDownListFor(m => m.Role,
                                 new SelectList(new[] {
-                                    new { Value = "U", Text = "Kullanıcı" },
+                                    new { Value = "U", Text = "User" },
                                     new { Value = "A", Text = "Admin" }
                                 }, "Value", "Text"),
-                                "Rol seçin", new { @class = "form-select" })
+                                "Select role", new { @class = "form-select" })
                             @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
                         </div>
-                        <button type="submit" class="btn btn-success w-100">Kullanıcı Ekle</button>
+                        <button type="submit" class="btn btn-success w-100">Add User</button>
                     }
 
                     <div class="mt-4 text-center">
-                        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-link">← Admin Paneline Dön</a>
+                        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-link">← Back to Admin Panel</a>
                     </div>
                 </div>
             </div>
