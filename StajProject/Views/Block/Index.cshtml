@@ -93,6 +93,9 @@
                                         <i class="fas fa-heading me-2 text-primary"></i>Title
                                     </th>
                                     <th class="border-0 px-4 py-3">
+                                        <i class="fas fa-map-marker-alt me-2 text-warning"></i>City Code
+                                    </th>
+                                    <th class="border-0 px-4 py-3">
                                         <i class="fas fa-calendar-plus me-2 text-success"></i>Creation Date
                                     </th>
                                     <th class="border-0 px-4 py-3">
@@ -116,6 +119,13 @@
                                                     <h6 class="mb-0 fw-bold">@item.Title</h6>
                                                     <small class="text-muted">ID: @item.BlockId</small>
                                                 </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2">
+                                                    <i class="fas fa-map-marker-alt me-1"></i>@item.IlKodu
+                                                </span>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3">
@@ -186,6 +196,20 @@
 <style>
 .bg-gradient-primary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.text-white {
+    color: #ffffff !important;
+}
+
+.lead {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+.display-4 {
+    color: #ffffff !important;
+    font-weight: 700;
 }
 
 .table > :not(caption) > * > * {

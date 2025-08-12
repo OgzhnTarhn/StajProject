@@ -93,6 +93,7 @@ namespace StajProject.Controllers
                         Mandt = row.GetString("MANDT"),
                         BlockId = row.GetString("BLOCK_ID"),
                         Title = row.GetString("TITLE"),
+                        IlKodu = row.GetString("IL_KODU"),  // SAP'de IL_KODU alanı olarak tanımlı
                         Erdat = row.GetString("ERDAT"),
                         Aedat = row.GetString("AEDAT")
                     });
@@ -127,7 +128,7 @@ namespace StajProject.Controllers
         }
 
         // Block creation method (ZBLOCK_INSERT)
-        public string InsertBlock(string title, IList<string> detailLines = null)
+        public string InsertBlock(string title, string ilKodu, IList<string> detailLines = null)
         {
             try
             {
@@ -142,6 +143,7 @@ namespace StajProject.Controllers
 
                 // importing
                 func.SetValue("IV_TITLE", title.Trim());
+                func.SetValue("IV_ILKODU", ilKodu);  // SAP'de IV_ILKODU parametresi olarak tanımlı
 
                 // tables (we only fill LINE_TEXT; leave SEQ_NO empty if not needed)
                 IRfcTable itDtl = func.GetTable("IT_DTL");
@@ -174,7 +176,7 @@ namespace StajProject.Controllers
                 throw new Exception("Error occurred while creating block: " + ex.Message);
             }
         }
-        public bool UpdateBlock(string blockId, string title, bool replaceDetails, IList<string> detailLines = null)
+        public bool UpdateBlock(string blockId, string title, string ilKodu, bool replaceDetails, IList<string> detailLines = null)
         {
             var dest = GetDestination();
             var repo = dest.Repository;
@@ -183,6 +185,8 @@ namespace StajProject.Controllers
             func.SetValue("IV_BLOCK_ID", blockId ?? "");
             if (!string.IsNullOrWhiteSpace(title))
                 func.SetValue("IV_TITLE", title);
+            if (!string.IsNullOrWhiteSpace(ilKodu))
+                func.SetValue("IV_ILKODU", ilKodu);
 
             func.SetValue("IV_REPLACE_DTL", replaceDetails ? "X" : "");
 

@@ -59,6 +59,23 @@
                                 </div>
                             </div>
 
+                            <!-- Il Kodu -->
+                            <div class="mb-4">
+                                <label for="IlKodu" class="form-label fw-bold">
+                                    <i class="fas fa-map-marker-alt me-2 text-primary"></i>City Code
+                                </label>
+                                @Html.TextBoxFor(m => m.IlKodu, new
+                                {
+                                    @class = "form-control form-control-lg",
+                                    placeholder = "Example: 34, 06, 35...",
+                                    required = "required"
+                                })
+                                @Html.ValidationMessageFor(m => m.IlKodu, "", new { @class = "text-danger" })
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>Enter the city code for this trip destination.
+                                </div>
+                            </div>
+
                             <!-- Detail Lines -->
                             <div class="mb-4">
                                 <label for="DetailLines" class="form-label fw-bold">

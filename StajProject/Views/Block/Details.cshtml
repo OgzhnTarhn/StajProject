@@ -134,6 +134,14 @@
                                 <p class="mb-0 fw-bold">@header.BlockId</p>
                             </div>
                             <div class="mb-3">
+                                <label class="form-label text-muted small">City Code</label>
+                                <p class="mb-0 fw-bold">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary">
+                                        <i class="fas fa-map-marker-alt me-1"></i>@header.IlKodu
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label text-muted small">Mandant</label>
                                 <p class="mb-0 fw-bold">@header.Mandt</p>
                             </div>
@@ -210,6 +218,20 @@
 <style>
     .bg-gradient-primary {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .text-white {
+        color: #ffffff !important;
+    }
+
+    .lead {
+        color: #ffffff !important;
+        font-weight: 500;
+    }
+
+    .display-4 {
+        color: #ffffff !important;
+        font-weight: 700;
     }
 
     .card {

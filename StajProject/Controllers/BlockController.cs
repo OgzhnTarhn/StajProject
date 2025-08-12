@@ -84,11 +84,11 @@ namespace StajProject.Controllers
                             lines.Add(l.Trim());
                 }
 
-                var newId = _sapController.InsertBlock(model.Title, lines);
+                var newId = _sapController.InsertBlock(model.Title, model.IlKodu, lines);
 
-                // Success → go to details
-                TempData["SuccessMessage"] = "Block created successfully!";
-                return RedirectToAction("Details", new { id = newId });
+                // Success → go to Trip Planner (Index)
+                TempData["SuccessMessage"] = "Trip created successfully!";
+                return RedirectToAction("Index", "Block");
             }
             catch (System.Exception ex)
             {
@@ -107,6 +107,7 @@ namespace StajProject.Controllers
             {
                 BlockId = id,
                 Title = data.Headers.Count > 0 ? data.Headers[0].Title : "",
+                IlKodu = data.Headers.Count > 0 ? data.Headers[0].IlKodu : "",
                 // mevcut detayları textarea'ya koymak istersen:
                 DetailLines = string.Join("\n", data.Details.ConvertAll(d => d.LineText))
             };
@@ -120,7 +121,7 @@ namespace StajProject.Controllers
             if (!ModelState.IsValid) return View(model);
 
             var lines = ParseLines(model.DetailLines);
-            var ok = _sapController.UpdateBlock(model.BlockId, model.Title, model.ReplaceDetails, lines);
+            var ok = _sapController.UpdateBlock(model.BlockId, model.Title, model.IlKodu, model.ReplaceDetails, lines);
             if (!ok) ModelState.AddModelError("", "Update failed");
 
             return RedirectToAction("Details", new { id = model.BlockId });
