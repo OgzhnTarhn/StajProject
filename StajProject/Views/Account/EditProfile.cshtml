@@ -73,6 +73,12 @@
                         </div>
                         
                         @Html.Raw(userFields)
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">City Code:</label>
+                            @Html.TextBoxFor(m => m.IlKodu, new { @class = "form-control form-control-lg", placeholder = "Example: 34, 06, 35..." })
+                        </div>
+                        
                         @Html.Raw(adminNote)
                         
                         <div class="d-flex gap-2">

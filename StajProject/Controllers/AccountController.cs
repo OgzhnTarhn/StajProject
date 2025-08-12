@@ -1,6 +1,7 @@
 ﻿using SAP.Middleware.Connector;
 using StajProject.Helpers;
 using StajProject.Models;
+using System;
 using System.Web.Mvc;
 
 public class AccountController : Controller
@@ -124,12 +125,30 @@ public class AccountController : Controller
             else
             {
                 // Session'dan al
-                userInfo.IlKodu = Session["IlKodu"]?.ToString();
+                userInfo.Username = Session["Username"]?.ToString() ?? "";
+                userInfo.Role = Session["Role"]?.ToString() ?? "";
+                userInfo.IlKodu = Session["IlKodu"]?.ToString() ?? "";
             }
         }
         catch (RfcAbapException ex)
         {
-            ViewBag.ErrorMessage = "SAP Error: " + ex.Message;
+            // SAP hatası durumunda Session'dan bilgileri al (hata mesajı gösterme)
+            userInfo.Username = Session["Username"]?.ToString() ?? "";
+            userInfo.Role = Session["Role"]?.ToString() ?? "";
+            userInfo.IlKodu = Session["IlKodu"]?.ToString() ?? "";
+            
+            // Log the error for debugging (but don't show to user)
+            System.Diagnostics.Debug.WriteLine($"SAP Error in UserDashboard: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Genel hata durumunda da Session'dan bilgileri al
+            userInfo.Username = Session["Username"]?.ToString() ?? "";
+            userInfo.Role = Session["Role"]?.ToString() ?? "";
+            userInfo.IlKodu = Session["IlKodu"]?.ToString() ?? "";
+            
+            // Log the error for debugging (but don't show to user)
+            System.Diagnostics.Debug.WriteLine($"General Error in UserDashboard: {ex.Message}");
         }
 
         return View(userInfo);
@@ -161,7 +180,19 @@ public class AccountController : Controller
         }
         catch (RfcAbapException ex)
         {
-            // Hata durumunda boş bırak
+            // Hata durumunda Session'dan bilgileri al
+            model.IlKodu = Session["IlKodu"]?.ToString() ?? "";
+            
+            // Log the error for debugging (but don't show to user)
+            System.Diagnostics.Debug.WriteLine($"SAP Error in EditProfile: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Genel hata durumunda da Session'dan bilgileri al
+            model.IlKodu = Session["IlKodu"]?.ToString() ?? "";
+            
+            // Log the error for debugging (but don't show to user)
+            System.Diagnostics.Debug.WriteLine($"General Error in EditProfile: {ex.Message}");
         }
         
         return View(model);
@@ -185,7 +216,7 @@ public class AccountController : Controller
                 func.SetValue("IV_NEW_USERNAME", model.NewUsername ?? "");
                 func.SetValue("IV_NEW_PASSWORD", model.NewPassword ?? "");
                 func.SetValue("IV_ROLE", ""); // User rol değiştiremez
-                // IV_IL_KODU kaldırıldı - SAP'de güncellenmesini istemiyoruz
+                func.SetValue("IV_IL_KODU", model.IlKodu ?? ""); // User il_kodu değiştirebilir
 
                 func.Invoke(dest);
 
@@ -197,7 +228,17 @@ public class AccountController : Controller
             }
             catch (RfcAbapException ex)
             {
-                model.Message = "SAP Error: " + ex.Message;
+                model.Message = "Profile update failed. Please try again later.";
+                
+                // Log the error for debugging (but don't show to user)
+                System.Diagnostics.Debug.WriteLine($"SAP Error in EditProfile POST: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                model.Message = "An unexpected error occurred. Please try again later.";
+                
+                // Log the error for debugging (but don't show to user)
+                System.Diagnostics.Debug.WriteLine($"General Error in EditProfile POST: {ex.Message}");
             }
         }
         return View(model);

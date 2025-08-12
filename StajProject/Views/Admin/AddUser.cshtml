@@ -43,6 +43,11 @@
                                 "Select role", new { @class = "form-select" })
                             @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
                         </div>
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.IlKodu, "City Code", new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.IlKodu, new { @class = "form-control", placeholder = "Example: 34, 06, 35..." })
+                            @Html.ValidationMessageFor(m => m.IlKodu, "", new { @class = "text-danger" })
+                        </div>
                         <button type="submit" class="btn btn-success w-100">Add User</button>
                     }
 

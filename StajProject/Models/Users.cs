@@ -14,5 +14,7 @@ namespace StajProject.Models
 
         [Required]
         public char Role { get; set; }   // 'S' (API User)
+        
+        public string IlKodu { get; set; }  // Yeni eklenen il_kodu alanı
     }
 }

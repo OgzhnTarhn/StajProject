@@ -126,7 +126,7 @@ public class AdminController : Controller
                 func.SetValue("IV_NEW_USERNAME", ""); // Admin doesn't change
                 func.SetValue("IV_NEW_PASSWORD", ""); // Admin değiştirmez
                 func.SetValue("IV_ROLE", model.Role); // Only role
-                // IV_IL_KODU kaldırıldı - SAP'de güncellenmesini istemiyoruz
+                func.SetValue("IV_IL_KODU", model.IlKodu ?? ""); // Admin il_kodu değiştirebilir
 
                 func.Invoke(dest);
 

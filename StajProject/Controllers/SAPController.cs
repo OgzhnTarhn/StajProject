@@ -80,12 +80,15 @@ namespace StajProject.Controllers
                 IRfcFunction func = repo.CreateFunction("ZBLOCK_GET");
 
                 if (!string.IsNullOrWhiteSpace(blockId))
+                {
                     func.SetValue("IV_BLOCK_ID", blockId);
+                }
 
                 func.Invoke(dest);
 
                 // HEADER table
                 IRfcTable etHdr = func.GetTable("ET_HDR");
+                
                 foreach (IRfcStructure row in etHdr)
                 {
                     headers.Add(new BlockHeaderModel

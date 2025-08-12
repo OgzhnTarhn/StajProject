@@ -14,8 +14,8 @@
                         <i class="fas fa-user-circle me-3"></i>User Dashboard
                     </h1>
                     <p class="lead mb-0">
-                        Welcome, @Model.Username! 
-                        @if (Model.Role == "A")
+                        Welcome, @(string.IsNullOrEmpty(Model.Username) ? "User" : Model.Username)! 
+                        @if (!string.IsNullOrEmpty(Model.Role) && Model.Role == "A")
                         {
                             <span>As an admin, you have access to user management and trip administration.</span>
                         }
@@ -28,7 +28,7 @@
                 <div class="col-lg-4 text-lg-end">
                     <div class="d-flex flex-column align-items-lg-end">
                         <span class="badge bg-light text-primary mb-2 px-3 py-2">
-                            <i class="fas fa-user-tag me-2"></i>@((@Model.Role == "U") ? "User" : @Model.Role)
+                            <i class="fas fa-user-tag me-2"></i>@(string.IsNullOrEmpty(Model.Role) ? "User" : ((@Model.Role == "U") ? "User" : @Model.Role))
                         </span>
                     </div>
                 </div>
@@ -53,9 +53,9 @@
                                 <i class="fas fa-user-circle text-primary" style="font-size: 2.5rem;"></i>
                             </div>
                             <div>
-                                <h5 class="mb-1 fw-bold">@Model.Username</h5>
+                                <h5 class="mb-1 fw-bold">@(string.IsNullOrEmpty(Model.Username) ? "User" : Model.Username)</h5>
                                 <span class="badge bg-info bg-opacity-10 text-info px-3 py-2">
-                                    <i class="fas fa-award me-1"></i>@((@Model.Role == "U") ? "User" : @Model.Role)
+                                    <i class="fas fa-award me-1"></i>@(string.IsNullOrEmpty(Model.Role) ? "User" : ((@Model.Role == "U") ? "User" : @Model.Role))
                                 </span>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                                     <i class="fas fa-user text-primary me-3"></i>
                                     <div>
                                         <small class="text-muted d-block">Username</small>
-                                        <strong>@Model.Username</strong>
+                                        <strong>@(string.IsNullOrEmpty(Model.Username) ? "Not set" : Model.Username)</strong>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +75,16 @@
                                     <i class="fas fa-shield-alt text-success me-3"></i>
                                     <div>
                                         <small class="text-muted d-block">Role</small>
-                                        <strong>@((@Model.Role == "U") ? "User" : @Model.Role)</strong>
+                                        <strong>@(string.IsNullOrEmpty(Model.Role) ? "Not set" : ((@Model.Role == "U") ? "User" : @Model.Role))</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center p-3 bg-light rounded">
+                                    <i class="fas fa-map-marker-alt text-info me-3"></i>
+                                    <div>
+                                        <small class="text-muted d-block">City Code</small>
+                                        <strong>@(string.IsNullOrEmpty(Model.IlKodu) ? "Not set" : Model.IlKodu)</strong>
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +109,7 @@
                             <a href="@Url.Action("EditProfile", "Account")" class="btn btn-outline-primary btn-lg">
                                 <i class="fas fa-user-edit me-2"></i>Edit Profile
                             </a>
-                            @if (Model.Role == "A")
+                            @if (!string.IsNullOrEmpty(Model.Role) && Model.Role == "A")
                             {
                                 <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-outline-success btn-lg">
                                     <i class="fas fa-users me-2"></i>User Management
@@ -123,17 +132,7 @@
             </div>
         </div>
 
-        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-        {
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="alert alert-danger border-0 shadow-sm">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        @ViewBag.ErrorMessage
-                    </div>
-                </div>
-            </div>
-        }
+        @* Hata mesajları artık gösterilmiyor - kullanıcı deneyimi için gizlendi *@
     </div>
 </div>
 
