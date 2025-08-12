@@ -29,7 +29,16 @@
                     <h1 class="display-4 fw-bold mb-3">
                         <i class="fas fa-map-marked-alt me-3"></i>Trips
                     </h1>
-                    <p class="lead mb-0">View all your trip plans here.</p>
+                    <p class="lead mb-0">
+                        @if (Session["Role"] != null && Session["Role"].ToString() == "A")
+                        {
+                            <span>View all trip plans in the system.</span>
+                        }
+                        else
+                        {
+                            <span>View trips available in your city (Code: @Session["IlKodu"])</span>
+                        }
+                    </p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
                     @if (Session["Role"] != null && Session["Role"].ToString() == "A")
@@ -58,7 +67,16 @@
                     <i class="fas fa-map text-muted" style="font-size: 64px;"></i>
                 </div>
                 <h3 class="text-muted mb-3">No Trips Found</h3>
-                <p class="text-muted mb-4">Start creating your first trip plan.</p>
+                <p class="text-muted mb-4">
+                    @if (Session["Role"] != null && Session["Role"].ToString() == "A")
+                    {
+                        <span>Start creating your first trip plan.</span>
+                    }
+                    else
+                    {
+                        <span>No trips available in your city (Code: @Session["IlKodu"]).</span>
+                    }
+                </p>
                 @if (Session["Role"] != null && Session["Role"].ToString() == "A")
                 {
                     <a href="@Url.Action("Create", "Block")" class="btn btn-primary btn-lg">

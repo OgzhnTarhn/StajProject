@@ -3,6 +3,7 @@ using StajProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web;
 
@@ -67,7 +68,7 @@ namespace StajProject.Controllers
         }
 
         // Block verileri (ZBLOCK_GET)
-        public BlockVm GetBlocks(string blockId = null)
+        public BlockVm GetBlocks(string blockId = null, string userIlKodu = null, bool isAdmin = false)
         {
             try
             {
@@ -91,31 +92,46 @@ namespace StajProject.Controllers
                 
                 foreach (IRfcStructure row in etHdr)
                 {
-                    headers.Add(new BlockHeaderModel
+                    var ilKodu = row.GetString("IL_KODU");
+                    
+                    // Admin ise tüm gezileri göster, User ise sadece kendi şehir kodundakileri
+                    if (isAdmin || string.IsNullOrWhiteSpace(userIlKodu) || ilKodu == userIlKodu)
                     {
-                        Mandt = row.GetString("MANDT"),
-                        BlockId = row.GetString("BLOCK_ID"),
-                        Title = row.GetString("TITLE"),
-                        IlKodu = row.GetString("IL_KODU"),  // SAP'de IL_KODU alanı olarak tanımlı
-                        Erdat = row.GetString("ERDAT"),
-                        Aedat = row.GetString("AEDAT")
-                    });
+                        headers.Add(new BlockHeaderModel
+                        {
+                            Mandt = row.GetString("MANDT"),
+                            BlockId = row.GetString("BLOCK_ID"),
+                            Title = row.GetString("TITLE"),
+                            IlKodu = ilKodu,  // SAP'de IL_KODU alanı olarak tanımlı
+                            Erdat = row.GetString("ERDAT"),
+                            Aedat = row.GetString("AEDAT")
+                        });
+                    }
                 }
 
-                // DETAIL table
-                IRfcTable etDtl = func.GetTable("ET_DTL");
-                foreach (IRfcStructure row in etDtl)
+                // DETAIL table - sadece header'da olan block'ların detaylarını al
+                if (headers.Count > 0)
                 {
-                    details.Add(new BlockDetailModel
+                    IRfcTable etDtl = func.GetTable("ET_DTL");
+                    var allowedBlockIds = headers.Select(h => h.BlockId).ToList();
+                    
+                    foreach (IRfcStructure row in etDtl)
                     {
-                        Mandt = row.GetString("MANDT"),
-                        DetailId = row.GetString("DETAIL_ID"),
-                        BlockId = row.GetString("BLOCK_ID"),
-                        SeqNo = row.GetString("SEQ_NO"),
-                        LineText = row.GetString("LINE_TEXT"),
-                        Erdat = row.GetString("ERDAT"),
-                        Aedat = row.GetString("AEDAT")
-                    });
+                        var rowBlockId = row.GetString("BLOCK_ID");
+                        if (allowedBlockIds.Contains(rowBlockId))
+                        {
+                            details.Add(new BlockDetailModel
+                            {
+                                Mandt = row.GetString("MANDT"),
+                                DetailId = row.GetString("DETAIL_ID"),
+                                BlockId = rowBlockId,
+                                SeqNo = row.GetString("SEQ_NO"),
+                                LineText = row.GetString("LINE_TEXT"),
+                                Erdat = row.GetString("ERDAT"),
+                                Aedat = row.GetString("AEDAT")
+                            });
+                        }
+                    }
                 }
 
                 return new BlockVm

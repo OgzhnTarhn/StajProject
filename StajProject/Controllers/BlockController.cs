@@ -24,7 +24,12 @@ namespace StajProject.Controllers
 
             try
             {
-                var vm = _sapController.GetBlocks(null); // All headers
+                // Kullanıcının rolüne ve şehir koduna göre gezileri filtrele
+                var userRole = Session["Role"]?.ToString();
+                var userIlKodu = Session["IlKodu"]?.ToString();
+                var isAdmin = userRole == "A";
+                
+                var vm = _sapController.GetBlocks(null, userIlKodu, isAdmin);
                 return View(vm.Headers); // We only send header list to View
             }
             catch (System.Exception ex)
@@ -48,7 +53,20 @@ namespace StajProject.Controllers
 
             try
             {
-                var vm = _sapController.GetBlocks(id); // Seçilen header + detaylar
+                // Kullanıcının rolüne ve şehir koduna göre gezileri filtrele
+                var userRole = Session["Role"]?.ToString();
+                var userIlKodu = Session["IlKodu"]?.ToString();
+                var isAdmin = userRole == "A";
+                
+                var vm = _sapController.GetBlocks(id, userIlKodu, isAdmin);
+                
+                // Eğer kullanıcı bu geziyi görmeye yetkili değilse Index'e yönlendir
+                if (vm.Headers.Count == 0)
+                {
+                    TempData["ErrorMessage"] = "You don't have permission to view this trip.";
+                    return RedirectToAction("Index");
+                }
+                
                 return View(vm);
             }
             catch (System.Exception ex)
@@ -101,7 +119,8 @@ namespace StajProject.Controllers
         public ActionResult Edit(string id)
         {
             if (string.IsNullOrEmpty(id)) return RedirectToAction("Index");
-            var data = _sapController.GetBlocks(id);
+            
+            var data = _sapController.GetBlocks(id); // Admin tüm gezileri görebilir
 
             var m = new EditBlockVm
             {
