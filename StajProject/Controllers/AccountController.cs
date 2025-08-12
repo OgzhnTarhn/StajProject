@@ -31,11 +31,13 @@ public class AccountController : Controller
                 {
                     var userRow = etUserInfo[0];
                     model.Role = userRow.GetString("ROLE");
+                    model.IlKodu = userRow.GetString("IL_KODU");  // Yeni eklenen il_kodu field'ı
 
                     // Kullanıcı bilgilerini Session'a ata!
                     Session["Username"] = model.Username;
                     Session["Role"] = model.Role;
                     Session["Password"] = model.Password; // Bunu EKELE! (user dashboard için lazım)
+                    Session["IlKodu"] = model.IlKodu;  // Yeni eklenen il_kodu field'ı
 
                     if (model.Role == "A" || model.Role == "U")
                         return RedirectToAction("Index", "Home"); // Ana sayfaya yönlendir, oradan role göre yönlendirilecek
@@ -74,6 +76,7 @@ public class AccountController : Controller
                 func.SetValue("IV_USERNAME", model.Username);
                 func.SetValue("IV_PASSWORD", model.Password);
                 func.SetValue("IV_ROLE", "U"); // Hep User olarak kaydedilir
+                func.SetValue("IV_IL_KODU", model.IlKodu ?? ""); // Yeni eklenen il_kodu field'ı
 
                 func.Invoke(dest);
 
@@ -116,6 +119,12 @@ public class AccountController : Controller
                 var userRow = etUserInfo[0];
                 userInfo.Username = userRow.GetString("USERNAME");
                 userInfo.Role = userRow.GetString("ROLE");
+                userInfo.IlKodu = userRow.GetString("IL_KODU");  // Yeni eklenen il_kodu field'ı
+            }
+            else
+            {
+                // Session'dan al
+                userInfo.IlKodu = Session["IlKodu"]?.ToString();
             }
         }
         catch (RfcAbapException ex)
@@ -133,6 +142,28 @@ public class AccountController : Controller
             return RedirectToAction("Login");
 
         var model = new EditUserProfileModel { Username = Session["Username"].ToString() };
+        
+        // Kullanıcının mevcut bilgilerini SAP'den çek
+        try
+        {
+            RfcDestination dest;
+            IRfcFunction func = SapConnectorBase.CreateFunction("ZUSR_GET_USER", out dest);
+            func.SetValue("IV_USERNAME", Session["Username"].ToString());
+            func.SetValue("IV_PASSWORD", Session["Password"].ToString());
+            func.Invoke(dest);
+
+            IRfcTable etUserInfo = func.GetTable("ET_USER_INFO");
+            if (etUserInfo.Count > 0)
+            {
+                var userRow = etUserInfo[0];
+                model.IlKodu = userRow.GetString("IL_KODU");
+            }
+        }
+        catch (RfcAbapException ex)
+        {
+            // Hata durumunda boş bırak
+        }
+        
         return View(model);
     }
 
@@ -154,6 +185,7 @@ public class AccountController : Controller
                 func.SetValue("IV_NEW_USERNAME", model.NewUsername ?? "");
                 func.SetValue("IV_NEW_PASSWORD", model.NewPassword ?? "");
                 func.SetValue("IV_ROLE", ""); // User rol değiştiremez
+                // IV_IL_KODU kaldırıldı - SAP'de güncellenmesini istemiyoruz
 
                 func.Invoke(dest);
 

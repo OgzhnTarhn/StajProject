@@ -11,6 +11,7 @@ namespace StajProject.Models
         public string Password { get; set; }
 
         public string Role { get; set; }
+        public string IlKodu { get; set; }  // Yeni eklenen il_kodu field'ı
         public string Message { get; set; }
     }
 

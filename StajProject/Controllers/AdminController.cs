@@ -28,7 +28,8 @@ public class AdminController : Controller
                 userList.Add(new SAPUserModel
                 {
                     Username = row.GetString("USERNAME"),
-                    Role = row.GetString("ROLE")
+                    Role = row.GetString("ROLE"),
+                    IlKodu = row.GetString("IL_KODU")  // Yeni eklenen il_kodu field'ı
                 });
             }
         }
@@ -61,6 +62,7 @@ public class AdminController : Controller
                 func.SetValue("IV_USERNAME", model.Username);
                 func.SetValue("IV_PASSWORD", model.Password);
                 func.SetValue("IV_ROLE", model.Role); // Admin panelinde seçilen rol gönderilir
+                func.SetValue("IV_IL_KODU", model.IlKodu ?? ""); // Yeni eklenen il_kodu field'ı
 
                 func.Invoke(dest);
                 ViewBag.Message = func.GetString("EV_RESULT");
@@ -95,6 +97,7 @@ public class AdminController : Controller
             {
                 var userRow = etUserInfo[0];
                 model.Role = userRow.GetString("ROLE");
+                model.IlKodu = userRow.GetString("IL_KODU");  // Yeni eklenen il_kodu field'ı
             }
         }
         catch (RfcAbapException ex)
@@ -123,6 +126,7 @@ public class AdminController : Controller
                 func.SetValue("IV_NEW_USERNAME", ""); // Admin doesn't change
                 func.SetValue("IV_NEW_PASSWORD", ""); // Admin değiştirmez
                 func.SetValue("IV_ROLE", model.Role); // Only role
+                // IV_IL_KODU kaldırıldı - SAP'de güncellenmesini istemiyoruz
 
                 func.Invoke(dest);
 

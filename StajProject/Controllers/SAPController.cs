@@ -53,7 +53,8 @@ namespace StajProject.Controllers
                     {
                         Username = row.GetString("USERNAME"),
                         Password = row.GetString("PASSWORD"),
-                        Role = row.GetString("ROLE")
+                        Role = row.GetString("ROLE"),
+                        IlKodu = row.GetString("IL_KODU")  // Yeni eklenen il_kodu field'ı
                     });
                 }
 
