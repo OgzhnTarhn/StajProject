@@ -1,13 +1,13 @@
 ﻿@model StajProject.Models.BlockVm
 
 @{
-    ViewBag.Title = "Gezi Detayları";
+    ViewBag.Title = "Trip Details";
 }
 
 <div class="container-fluid px-0">
     <!-- Anti-forgery token for delete operations -->
     @Html.AntiForgeryToken()
-    
+
     <!-- Hero Section -->
     <div class="bg-gradient-primary text-white py-5 mb-5">
         <div class="container">
@@ -21,10 +21,10 @@
                         }
                         else
                         {
-                            <span>Gezi Detayları</span>
+                            <span>Trip Details</span>
                         }
                     </h1>
-                    <p class="lead mb-0">Gezi planınızın tüm detaylarını buradan görüntüleyebilirsiniz.</p>
+                    <p class="lead mb-0">You can view all the details of your trip plan here.</p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
                     @if (Session["Role"] != null && Session["Role"].ToString() == "A")
@@ -33,7 +33,7 @@
                             <a href="@Url.Action("Edit", "Block", new { id = Model.Headers[0].BlockId })" class="btn btn-light btn-lg" title="Edit Trip">
                                 <i class="fas fa-edit me-2"></i>Edit
                             </a>
-                            <button class="btn btn-outline-light btn-lg" 
+                            <button class="btn btn-outline-light btn-lg"
                                     onclick="deleteTrip('@Model.Headers[0].BlockId', '@Model.Headers[0].Title')"
                                     title="Delete Trip">
                                 <i class="fas fa-trash me-2"></i>Delete
@@ -43,7 +43,7 @@
                     else
                     {
                         <span class="text-white-50">
-                            <i class="fas fa-lock me-2"></i>Sadece Admin Düzenleyebilir
+                            <i class="fas fa-lock me-2"></i>Only Admin Can Edit
                         </span>
                     }
                 </div>
@@ -59,7 +59,7 @@
                 <div class="card border-0 shadow mb-4">
                     <div class="card-header bg-white border-0 py-4">
                         <h3 class="mb-0">
-                            <i class="fas fa-list me-2 text-primary"></i>Gezi Detayları
+                            <i class="fas fa-list me-2 text-primary"></i>Trip Details
                         </h3>
                     </div>
                     <div class="card-body p-0">
@@ -70,10 +70,10 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th class="border-0 px-4 py-3" style="width: 80px;">
-                                                <i class="fas fa-hashtag me-2 text-primary"></i>Sıra
+                                                <i class="fas fa-hashtag me-2 text-primary"></i>Order
                                             </th>
                                             <th class="border-0 px-4 py-3">
-                                                <i class="fas fa-info-circle me-2 text-primary"></i>Detay
+                                                <i class="fas fa-info-circle me-2 text-primary"></i>Details
                                             </th>
                                         </tr>
                                     </thead>
@@ -201,32 +201,32 @@
         <!-- Geri Dön Butonu -->
         <div class="text-center mt-5">
             <a href="@Url.Action("Index", "Block")" class="btn btn-outline-primary btn-lg">
-                <i class="fas fa-arrow-left me-2"></i>Gezilere Geri Dön
+                <i class="fas fa-arrow-left me-2"></i>Return to Trips
             </a>
         </div>
     </div>
 </div>
 
 <style>
-.bg-gradient-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
 
-.card {
-    border-radius: 15px;
-}
+    .card {
+        border-radius: 15px;
+    }
 
-.table > :not(caption) > * > * {
-    border-bottom: 1px solid rgba(0,0,0,.05);
-}
+    .table > :not(caption) > * > * {
+        border-bottom: 1px solid rgba(0,0,0,.05);
+    }
 
-.table-hover > tbody > tr:hover {
-    background-color: rgba(0,0,0,.02);
-}
+    .table-hover > tbody > tr:hover {
+        background-color: rgba(0,0,0,.02);
+    }
 
-.badge {
-    font-size: 0.85rem;
-}
+    .badge {
+        font-size: 0.85rem;
+    }
 </style>
 
 @section scripts {
@@ -237,21 +237,21 @@
                 var form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '@Url.Action("Delete", "Block")';
-                
+
                 // Add anti-forgery token
                 var token = document.createElement('input');
                 token.type = 'hidden';
                 token.name = '__RequestVerificationToken';
                 token.value = $('input[name="__RequestVerificationToken"]').val();
                 form.appendChild(token);
-                
+
                 // Add block ID
                 var idInput = document.createElement('input');
                 idInput.type = 'hidden';
                 idInput.name = 'id';
                 idInput.value = blockId;
                 form.appendChild(idInput);
-                
+
                 // Submit the form
                 document.body.appendChild(form);
                 form.submit();

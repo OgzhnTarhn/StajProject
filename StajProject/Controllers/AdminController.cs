@@ -120,9 +120,9 @@ public class AdminController : Controller
 
                 func.SetValue("IV_USERNAME", model.Username);
                 func.SetValue("IV_OLD_PASSWORD", ""); // Admin şifre girmez
-                func.SetValue("IV_NEW_USERNAME", ""); // Admin değiştirmez
+                func.SetValue("IV_NEW_USERNAME", ""); // Admin doesn't change
                 func.SetValue("IV_NEW_PASSWORD", ""); // Admin değiştirmez
-                func.SetValue("IV_ROLE", model.Role); // Sadece rol
+                func.SetValue("IV_ROLE", model.Role); // Only role
 
                 func.Invoke(dest);
 

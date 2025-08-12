@@ -61,7 +61,7 @@ namespace StajProject.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("SAP Hatası: " + ex.Message);
+                throw new Exception("SAP Error: " + ex.Message);
             }
         }
 
@@ -83,7 +83,7 @@ namespace StajProject.Controllers
 
                 func.Invoke(dest);
 
-                // HEADER tablosu
+                // HEADER table
                 IRfcTable etHdr = func.GetTable("ET_HDR");
                 foreach (IRfcStructure row in etHdr)
                 {
@@ -97,7 +97,7 @@ namespace StajProject.Controllers
                     });
                 }
 
-                // DETAIL tablosu
+                // DETAIL table
                 IRfcTable etDtl = func.GetTable("ET_DTL");
                 foreach (IRfcStructure row in etDtl)
                 {
@@ -121,18 +121,18 @@ namespace StajProject.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("SAP Hatası: " + ex.Message);
+                throw new Exception("SAP Error: " + ex.Message);
             }
         }
 
-        // Block oluşturma metodu (ZBLOCK_INSERT)
+        // Block creation method (ZBLOCK_INSERT)
         public string InsertBlock(string title, IList<string> detailLines = null)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(title))
                 {
-                    throw new ArgumentException("Başlık boş olamaz");
+                    throw new ArgumentException("Title cannot be empty");
                 }
 
                 var dest = GetDestination();
@@ -142,7 +142,7 @@ namespace StajProject.Controllers
                 // importing
                 func.SetValue("IV_TITLE", title.Trim());
 
-                // tables (sadece LINE_TEXT dolduracağız; SEQ_NO istemezsen boş bırak)
+                // tables (we only fill LINE_TEXT; leave SEQ_NO empty if not needed)
                 IRfcTable itDtl = func.GetTable("IT_DTL");
                 if (detailLines != null && detailLines.Count > 0)
                 {
@@ -163,14 +163,14 @@ namespace StajProject.Controllers
                 
                 if (string.IsNullOrWhiteSpace(newId))
                 {
-                    throw new Exception("Block ID döndürülemedi");
+                    throw new Exception("Block ID could not be returned");
                 }
 
                 return newId;
             }
             catch (Exception ex)
             {
-                throw new Exception("Block oluşturulurken hata: " + ex.Message);
+                throw new Exception("Error occurred while creating block: " + ex.Message);
             }
         }
         public bool UpdateBlock(string blockId, string title, bool replaceDetails, IList<string> detailLines = null)

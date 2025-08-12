@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 //      Yapı Numarası
 //      Düzeltme
 //
-// Tüm değerleri belirtebilir veya Gözden Geçirme ve Yapı Numaralarını varsayılan değerlerine döndürebilirsiniz
-// gösterildiği gibi '*' ile varsayılan değer atayabilirsiniz:
+// You can specify all the values or you can default the Revision and Build Numbers
+// as shown below, you can assign default values with '*':
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

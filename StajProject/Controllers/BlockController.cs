@@ -24,8 +24,8 @@ namespace StajProject.Controllers
 
             try
             {
-                var vm = _sapController.GetBlocks(null); // Tüm header'lar
-                return View(vm.Headers); // View'a sadece header listesi gönderiyoruz
+                var vm = _sapController.GetBlocks(null); // All headers
+                return View(vm.Headers); // We only send header list to View
             }
             catch (System.Exception ex)
             {
@@ -86,7 +86,7 @@ namespace StajProject.Controllers
 
                 var newId = _sapController.InsertBlock(model.Title, lines);
 
-                // Başarılı → detaya git
+                // Success → go to details
                 TempData["SuccessMessage"] = "Block created successfully!";
                 return RedirectToAction("Details", new { id = newId });
             }
