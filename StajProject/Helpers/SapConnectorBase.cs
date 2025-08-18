@@ -8,13 +8,13 @@ namespace StajProject.Helpers
         {
             var parms = new RfcConfigParameters();
             parms.Add(RfcConfigParameters.Name, "SAP_DEST");
-            parms.Add(RfcConfigParameters.AppServerHost, "172.31.2.10");
-            parms.Add(RfcConfigParameters.SystemNumber, "00");
-            parms.Add(RfcConfigParameters.User, "xdeveloper");
-            parms.Add(RfcConfigParameters.Password, "Sf5687!pl@");
-            parms.Add(RfcConfigParameters.Client, "100");
-            parms.Add(RfcConfigParameters.Language, "EN");
-            parms.Add(RfcConfigParameters.PoolSize, "5");
+            parms.Add(RfcConfigParameters.AppServerHost, "");
+            parms.Add(RfcConfigParameters.SystemNumber, "");
+            parms.Add(RfcConfigParameters.User, "");
+            parms.Add(RfcConfigParameters.Password, "");
+            parms.Add(RfcConfigParameters.Client, "");
+            parms.Add(RfcConfigParameters.Language, "");
+            parms.Add(RfcConfigParameters.PoolSize, "");
             return parms;
         }
 
